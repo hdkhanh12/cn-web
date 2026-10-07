@@ -1,0 +1,633 @@
+/* =====================================================================
+   Blakletterpress — Bài tập 4: Xây dựng CSS phong cách Liquid Glass
+   (Liquid Glassmorphism + Responsive Design)
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+
+/* --- Reset & Global Variables --- */
+:root {
+	--font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	--font-serif: 'Playfair Display', Georgia, serif;
+	
+	/* Liquid Glass Palette */
+	--glass-bg: rgba(255, 255, 255, 0.08);
+	--glass-bg-hover: rgba(255, 255, 255, 0.14);
+	--glass-border: rgba(255, 255, 255, 0.2);
+	--glass-border-light: rgba(255, 255, 255, 0.35);
+	--glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+	--glass-shadow-glow: 0 16px 40px 0 rgba(99, 102, 241, 0.25);
+	--blur-filter: blur(18px) saturate(180%);
+	
+	/* Accent & Highlights */
+	--accent-primary: #818cf8;
+	--accent-gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #f43f5e 100%);
+	--liquid-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+	
+	/* Text Colors */
+	--text-primary: #f8fafc;
+	--text-secondary: #cbd5e1;
+	--text-muted: #94a3b8;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: var(--font-sans);
+	color: var(--text-primary);
+	line-height: 1.7;
+	min-height: 100vh;
+	/* Nền Liquid Mesh Aurora đa tầng */
+	background-color: #0b0f19;
+	background-image: 
+		radial-gradient(circle at 10% 15%, rgba(99, 102, 241, 0.35) 0%, transparent 35%),
+		radial-gradient(circle at 85% 10%, rgba(236, 72, 153, 0.3) 0%, transparent 35%),
+		radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.22) 0%, transparent 45%),
+		radial-gradient(circle at 20% 85%, rgba(168, 85, 247, 0.3) 0%, transparent 40%),
+		radial-gradient(circle at 85% 85%, rgba(244, 63, 94, 0.25) 0%, transparent 40%);
+	background-attachment: fixed;
+	background-size: cover;
+	overflow-x: hidden;
+}
+
+a {
+	color: var(--accent-primary);
+	text-decoration: none;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+a:hover {
+	color: #f43f5e;
+	text-shadow: 0 0 12px rgba(244, 63, 94, 0.6);
+}
+
+/* =====================================================================
+   HEADER & NAVIGATION (Liquid Glass Floating Bar)
+   ===================================================================== */
+.site-header {
+	position: sticky;
+	top: 16px;
+	z-index: 1000;
+	max-width: 1200px;
+	margin: 16px auto 32px;
+	padding: 16px 28px;
+	background: rgba(15, 23, 42, 0.6);
+	backdrop-filter: var(--blur-filter);
+	-webkit-backdrop-filter: var(--blur-filter);
+	border: 1px solid var(--glass-border);
+	border-radius: 24px;
+	box-shadow: var(--glass-shadow);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.site-name {
+	font-family: var(--font-serif);
+	font-size: 26px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+	background: linear-gradient(135deg, #fff 30%, #cbd5e1 70%, #818cf8 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-decoration: none;
+}
+
+.tagline {
+	font-size: 13px;
+	color: var(--text-muted);
+	font-weight: 500;
+	margin-left: -8px;
+	padding-left: 12px;
+	border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.main-nav ul {
+	display: flex;
+	list-style: none;
+	gap: 8px;
+	align-items: center;
+}
+
+.main-nav a {
+	display: inline-block;
+	padding: 8px 18px;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--text-secondary);
+	border-radius: 999px;
+	background: transparent;
+	border: 1px solid transparent;
+	transition: all 0.3s ease;
+}
+
+.main-nav a:hover {
+	color: #fff;
+	background: rgba(255, 255, 255, 0.12);
+	border-color: var(--glass-border-light);
+	box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+	transform: translateY(-2px);
+}
+
+/* =====================================================================
+   MAIN LAYOUT (Glass Bento Grid / 2-Columns)
+   ===================================================================== */
+.layout {
+	max-width: 1200px;
+	margin: 0 auto 60px;
+	padding: 0 20px;
+	display: grid;
+	grid-template-columns: 1fr 340px;
+	gap: 32px;
+	align-items: start;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+/* =====================================================================
+   SECTION: GIỚI THIỆU (Hero Article)
+   ===================================================================== */
+#gioi-thieu {
+	background: var(--glass-bg);
+	backdrop-filter: var(--blur-filter);
+	-webkit-backdrop-filter: var(--blur-filter);
+	border: 1px solid var(--glass-border);
+	border-radius: 28px;
+	padding: 36px;
+	box-shadow: var(--glass-shadow);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#gioi-thieu:hover {
+	box-shadow: var(--glass-shadow-glow);
+}
+
+#gioi-thieu h1 {
+	font-family: var(--font-serif);
+	font-size: 36px;
+	font-weight: 700;
+	margin-bottom: 24px;
+	line-height: 1.3;
+	background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 60%, #818cf8 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+#gioi-thieu figure {
+	margin: 0 0 24px 0;
+	border-radius: 20px;
+	overflow: hidden;
+	border: 1px solid var(--glass-border);
+	background: rgba(0, 0, 0, 0.3);
+}
+
+#gioi-thieu figure img {
+	width: 100%;
+	height: 380px;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+#gioi-thieu figure:hover img {
+	transform: scale(1.04);
+}
+
+#gioi-thieu figcaption {
+	padding: 12px 18px;
+	font-size: 13px;
+	color: var(--text-muted);
+	background: rgba(15, 23, 42, 0.8);
+	backdrop-filter: blur(10px);
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#gioi-thieu p {
+	font-size: 16px;
+	color: var(--text-secondary);
+	margin-bottom: 16px;
+}
+
+#gioi-thieu strong {
+	color: #fff;
+	font-weight: 600;
+}
+
+/* =====================================================================
+   SECTION: GIÁ TRỊ CỐT LÕI (Liquid Cards Grid)
+   ===================================================================== */
+#gia-tri {
+	background: var(--glass-bg);
+	backdrop-filter: var(--blur-filter);
+	-webkit-backdrop-filter: var(--blur-filter);
+	border: 1px solid var(--glass-border);
+	border-radius: 28px;
+	padding: 36px;
+	box-shadow: var(--glass-shadow);
+}
+
+#gia-tri h2, #doi-ngu h2, #lien-he h2, .sidebar h2 {
+	font-family: var(--font-serif);
+	font-size: 28px;
+	font-weight: 700;
+	margin-bottom: 24px;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+#gia-tri h2::after, #doi-ngu h2::after, #lien-he h2::after, .sidebar h2::after {
+	content: '';
+	flex: 1;
+	height: 1px;
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.value-list {
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+}
+
+.value-card {
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 20px;
+	padding: 24px 20px;
+	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	position: relative;
+	overflow: hidden;
+}
+
+.value-card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: var(--accent-gradient);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.value-card:hover {
+	background: var(--glass-bg-hover);
+	border-color: var(--glass-border-light);
+	transform: translateY(-6px);
+	box-shadow: var(--glass-shadow-glow);
+}
+
+.value-card:hover::before {
+	opacity: 1;
+}
+
+.value-card h3 {
+	font-size: 20px;
+	font-weight: 700;
+	color: #fff;
+	margin-bottom: 10px;
+}
+
+.value-card p {
+	font-size: 14px;
+	color: var(--text-secondary);
+	line-height: 1.6;
+}
+
+/* =====================================================================
+   SECTION: ĐỘI NGŨ (Team Members in Liquid Pods)
+   ===================================================================== */
+#doi-ngu {
+	background: var(--glass-bg);
+	backdrop-filter: var(--blur-filter);
+	-webkit-backdrop-filter: var(--blur-filter);
+	border: 1px solid var(--glass-border);
+	border-radius: 28px;
+	padding: 36px;
+	box-shadow: var(--glass-shadow);
+}
+
+.team-list {
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+}
+
+.member {
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 22px;
+	padding: 24px 16px;
+	text-align: center;
+	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.member:hover {
+	background: var(--glass-bg-hover);
+	border-color: var(--glass-border-light);
+	transform: translateY(-6px);
+	box-shadow: 0 16px 36px rgba(236, 72, 153, 0.2);
+}
+
+.member img {
+	width: 110px;
+	height: 110px;
+	object-fit: cover;
+	border-radius: 50%;
+	margin: 0 auto 16px;
+	display: block;
+	border: 3px solid rgba(255, 255, 255, 0.25);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+	transition: transform 0.4s ease, border-color 0.4s ease;
+}
+
+.member:hover img {
+	transform: scale(1.08) rotate(2deg);
+	border-color: #ec4899;
+}
+
+.member h3 {
+	font-size: 18px;
+	font-weight: 700;
+	color: #fff;
+	margin-bottom: 6px;
+}
+
+.member p {
+	font-size: 13px;
+	color: var(--text-muted);
+}
+
+/* =====================================================================
+   SECTION: LIÊN HỆ (Glass Form)
+   ===================================================================== */
+#lien-he {
+	background: var(--glass-bg);
+	backdrop-filter: var(--blur-filter);
+	-webkit-backdrop-filter: var(--blur-filter);
+	border: 1px solid var(--glass-border);
+	border-radius: 28px;
+	padding: 36px;
+	box-shadow: var(--glass-shadow);
+}
+
+.contact-form {
+	max-width: 640px;
+}
+
+.contact-form p {
+	margin-bottom: 18px;
+}
+
+.contact-form label {
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--text-secondary);
+	margin-bottom: 6px;
+}
+
+.contact-form input,
+.contact-form textarea {
+	width: 100%;
+	padding: 12px 16px;
+	font-family: inherit;
+	font-size: 15px;
+	color: #fff;
+	background: rgba(15, 23, 42, 0.5);
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	border-radius: 14px;
+	outline: none;
+	transition: all 0.3s ease;
+	backdrop-filter: blur(8px);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+	border-color: var(--accent-primary);
+	background: rgba(15, 23, 42, 0.7);
+	box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3), 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.contact-form button[type="submit"] {
+	display: inline-block;
+	padding: 14px 36px;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 700;
+	color: #fff;
+	background: var(--accent-gradient);
+	border: none;
+	border-radius: 999px;
+	cursor: pointer;
+	box-shadow: 0 8px 24px rgba(236, 72, 153, 0.4);
+	transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.contact-form button[type="submit"]:hover {
+	transform: translateY(-3px) scale(1.02);
+	box-shadow: 0 12px 32px rgba(236, 72, 153, 0.6);
+}
+
+/* =====================================================================
+   SIDEBAR (Glass Widget Container)
+   ===================================================================== */
+.sidebar {
+	background: var(--glass-bg);
+	backdrop-filter: var(--blur-filter);
+	-webkit-backdrop-filter: var(--blur-filter);
+	border: 1px solid var(--glass-border);
+	border-radius: 28px;
+	padding: 32px 24px;
+	box-shadow: var(--glass-shadow);
+	position: sticky;
+	top: 104px;
+}
+
+.sidebar .recent {
+	list-style: none;
+	margin-bottom: 24px;
+}
+
+.sidebar .recent li {
+	margin-bottom: 12px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar .recent li:last-child {
+	border-bottom: none;
+}
+
+.sidebar .recent a {
+	display: block;
+	font-size: 14px;
+	color: var(--text-secondary);
+	line-height: 1.5;
+}
+
+.sidebar .recent a:hover {
+	color: #fff;
+	transform: translateX(4px);
+}
+
+.sidebar p {
+	font-size: 14px;
+	color: var(--text-muted);
+}
+
+/* =====================================================================
+   FOOTER (Liquid Glass Base)
+   ===================================================================== */
+.site-footer {
+	max-width: 1200px;
+	margin: 0 auto 40px;
+	padding: 48px 36px 28px;
+	background: rgba(15, 23, 42, 0.7);
+	backdrop-filter: var(--blur-filter);
+	-webkit-backdrop-filter: var(--blur-filter);
+	border: 1px solid var(--glass-border);
+	border-radius: 32px;
+	box-shadow: var(--glass-shadow);
+}
+
+.footer-cols {
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 28px;
+	margin-bottom: 36px;
+}
+
+.footer-cols li h3 {
+	font-size: 16px;
+	font-weight: 700;
+	color: #fff;
+	margin-bottom: 12px;
+	letter-spacing: 0.3px;
+}
+
+.footer-cols li p {
+	font-size: 13px;
+	color: var(--text-secondary);
+	line-height: 1.6;
+}
+
+.copyright {
+	text-align: center;
+	padding-top: 24px;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	font-size: 13px;
+	color: var(--text-muted);
+}
+
+/* =====================================================================
+   RESPONSIVE DESIGN (Media Queries)
+   ===================================================================== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+	.layout {
+		grid-template-columns: 1fr;
+		gap: 28px;
+	}
+
+	.sidebar {
+		position: static;
+	}
+
+	.value-list {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.footer-cols {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 24px;
+	}
+}
+
+/* Mobile lớn & Tablet nhỏ (600px - 767px) */
+@media (max-width: 768px) {
+	.site-header {
+		margin: 8px auto 20px;
+		padding: 16px 20px;
+		border-radius: 18px;
+	}
+
+	.tagline {
+		display: none; /* Ẩn bớt tagline trên màn hình nhỏ để thanh nav gọn gàng */
+	}
+
+	.main-nav ul {
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 6px;
+	}
+
+	.main-nav a {
+		padding: 6px 12px;
+		font-size: 13px;
+	}
+
+	#gioi-thieu, #gia-tri, #doi-ngu, #lien-he, .sidebar, .site-footer {
+		padding: 24px 20px;
+		border-radius: 20px;
+	}
+
+	#gioi-thieu h1 {
+		font-size: 28px;
+	}
+
+	#gioi-thieu figure img {
+		height: 240px;
+	}
+
+	.value-list {
+		grid-template-columns: 1fr;
+	}
+
+	.team-list {
+		grid-template-columns: 1fr;
+	}
+
+	.footer-cols {
+		grid-template-columns: 1fr;
+		gap: 20px;
+	}
+}
+
+/* Mobile nhỏ (< 480px) */
+@media (max-width: 480px) {
+	.site-header {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.main-nav ul {
+		justify-content: center;
+	}
+
+	.contact-form button[type="submit"] {
+		width: 100%;
+	}
+}
