@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Một mini quiz vui để làm quen.">
+  <title>Little Vibe Check</title>
+  <link rel="stylesheet" href="survey.css">
+</head>
+<body>
+  <div id="emoji-layer" aria-hidden="true"></div>
+  <div class="site-shell">
+    <main id="app" class="app-main">
+      <section id="welcome-screen" class="screen screen--welcome" aria-labelledby="welcome-title">
+        <div class="welcome-copy">
+          <h1 id="welcome-title">Trò chuyện với em một chút được không?</h1>
+          <p class="lede">j4f để hiểu nhau hơn chút</p>
+          <div class="welcome-pills" aria-label="Thông tin quiz">
+            <span>16 câu hỏi - chọn theo ý em - có thể skip</span>
+          </div>
+        </div>
+
+        <div class="welcome-panel">
+          <img class="cat-gif cat-gif--welcome" src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZW5mdW1mMWVodXZ6OG01Z3A4NDBocjF6Y2lnNmZ3bmwxbmJvdWh3NSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/K8iLG5FxxSsi5YdzUm/giphy.gif" alt="Mèo hoạt hình đang vẫy tay">
+          <div class="sparkle-field" aria-hidden="true">
+            <span class="sparkle sparkle--one">✦</span>
+            <span class="sparkle sparkle--two">✧</span>
+            <span class="sparkle sparkle--three">✦</span>
+            <span class="orbit orbit--one"></span>
+            <span class="orbit orbit--two"></span>
+          </div>
+          <div class="welcome-sticker" aria-hidden="true">૮ ˶ᵔ ᵕ ᵔ˶ ა</div>
+          <p class="panel-kicker">password</p>
+          <label for="access-code">nhập mã để vào nhé</label>
+          <div class="code-row">
+            <input id="access-code" type="password" autocomplete="off" placeholder="ví dụ: 000000" maxlength="32">
+            <button id="unlock-button" class="button button--primary" type="button">vô</button>
+          </div>
+          <p id="access-error" class="field-error" role="alert" hidden>lệch rồi</p>
+          <p class="microcopy">Gợi ý: 6 số ngày tháng năm sinh của em</p>
+        </div>
+      </section>
+
+      <section id="camera-screen" class="screen screen--camera" aria-labelledby="camera-title" hidden>
+        <div class="camera-copy">
+          <h2 id="camera-title">Làm một tấm selfie mở màn không nè?</h2>
+          <p class="lede">Không bắt buộc. Nếu em chụp và tick gửi thì anh mới thấy ảnh, còn không thì cứ bấm bỏ qua nhé.</p>
+          <div class="notice" role="note">
+            <strong>Lưu ý nhỏ</strong>
+            <span>Trình duyệt có thể sẽ hỏi mở camera nhé</span>
+          </div>
+          <div class="camera-actions">
+            <button id="start-camera-button" class="button button--primary" type="button">Mở camera 📸</button>
+            <button id="skip-camera-button" class="button button--ghost" type="button">Bỏ qua</button>
+          </div>
+          <p id="camera-error" class="field-error" role="alert" hidden></p>
+        </div>
+        <div class="camera-panel">
+          <div class="camera-frame">
+            <video id="camera-video" autoplay playsinline muted hidden></video>
+            <canvas id="camera-canvas" hidden></canvas>
+            <img id="camera-preview" alt="Ảnh xem trước chỉ hiển thị trên thiết bị này" hidden>
+            <div id="camera-placeholder" class="camera-placeholder" aria-hidden="true">♡</div>
+          </div>
+          <div class="camera-panel-actions">
+            <button id="capture-button" class="button button--primary" type="button" hidden>say cheese</button>
+            <button id="continue-camera-button" class="button button--outline" type="button" hidden>Dùng ảnh này</button>
+          </div>
+          <label id="photo-consent-row" class="consent-row" hidden>
+            <input id="photo-consent" type="checkbox">
+            <span>Em đồng ý gửi tấm ảnh này kèm câu trả lời cho anh nhé?</span>
+          </label>
+          <p class="microcopy">Chỉ khi em chụp và tick vào ô trên thì ảnh mới được gửi đi.</p>
+        </div>
+      </section>
+
+      <section id="quiz-screen" class="screen screen--quiz" aria-labelledby="question-title" hidden>
+        <div class="quiz-topline">
+          <div>
+            <p class="eyebrow">vibe check</p>
+            <p id="question-count" class="question-count">1 / 16</p>
+          </div>
+          <button id="quit-button" class="text-button" type="button">Thoát ra</button>
+        </div>
+        <div class="progress-track" aria-label="Tiến trình">
+          <span id="progress-bar" class="progress-bar"></span>
+        </div>
+
+        <form id="quiz-form" novalidate>
+          <div id="question-host"></div>
+          <div class="quiz-actions">
+            <button id="back-button" class="button button--ghost" type="button">← Quay lại</button>
+            <button id="next-button" class="button button--primary" type="submit">Tiếp tục →</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="sending-screen" class="screen screen--sending" aria-label="Đang gửi câu trả lời" hidden>
+        <div class="sending-cat" aria-hidden="true">૮ ˶ᵔ ᵕ ᵔ˶ ა</div>
+        <p class="eyebrow">đợi anh một xíu</p>
+        <h2>Đang gom câu trả lời lại nhé...</h2>
+        <div class="loading-skeleton" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </section>
+
+      <section id="result-screen" class="screen screen--result" aria-label="Đã gửi câu trả lời" hidden>
+        <div class="result-confetti" aria-hidden="true">
+          <span>✦</span><span>♡</span><span>✧</span><span>✦</span><span>♡</span>
+        </div>
+        <img class="cat-gif cat-gif--result" src="https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUycjZhb2w0OXk1aHRkZzd3MHI0ZnI3NXBhZnM1OTlubWk2dDhvZTh1cyZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/gdAjJVguYwM0NL0BZN/source.gif" alt="Mèo hoạt hình vẫy tay chúc mừng">
+        <div class="result-message">
+          <p id="storage-note" class="lede">Cảm ơn em nhé. Anh nhận được câu trả lời rồi, anh sẽ liên hệ lại sau.</p>
+          <button id="acknowledge-button" class="button button--primary" type="button">dạ</button>
+        </div>
+      </section>
+
+      <section id="completed-screen" class="screen screen--completed" aria-labelledby="completed-title" hidden>
+        <div class="completed-icon" aria-hidden="true">✓</div>
+        <p class="eyebrow">anh nhận được rồi nhé</p>
+        <h2 id="completed-title">Hân hạnh được làm quen</h2>
+        <p class="lede">Nhắn anh nếu em có câu hỏi nào khác nhé</p>
+      </section>
+    </main>
+  </div>
+  <script src="survey.js"></script>
+</body>
+</html>
