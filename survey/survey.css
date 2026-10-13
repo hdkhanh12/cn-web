@@ -207,8 +207,9 @@ input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4p
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scaleX(-1);
 }
+.camera-frame video { transform: scaleX(-1); }
+.camera-frame img { transform: none; }
 .camera-placeholder { color: #8b72d6; font-size: 4rem; animation: twinkle 2.4s ease-in-out infinite; }
 .camera-panel-actions { display: flex; gap: 9px; margin-top: 14px; }
 .camera-panel-actions .button { flex: 1; }

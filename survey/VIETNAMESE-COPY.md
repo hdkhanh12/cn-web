@@ -9,7 +9,7 @@
 | Dòng nhỏ | *(Bỏ)* |
 | Tiêu đề | Trò chuyện với em một chút, được không? |
 | Mô tả | để hiểu nhau hơn |
-| Pill | 16 câu hỏi - chọn theo ý em - có thể skip |
+| Pill | 16 câu - chọn theo ý em - có thể skip |
 | Nhãn panel | password |
 | Nhãn ô mã | nhập mã để vào nhé |
 | Placeholder | ví dụ: 000000 |
