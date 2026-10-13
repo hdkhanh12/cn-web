@@ -453,19 +453,6 @@ function runFireworks(duration = 2600) {
   }, duration + 100);
 }
 
-function skipFireworks() {
-  window.cancelAnimationFrame(fireworksFrame);
-  window.clearTimeout(fireworksTimer);
-  fireworksContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
-  fireworksLayer.hidden = true;
-  fireworksFrame = 0;
-}
-
-$("#skip-fireworks").addEventListener("click", skipFireworks);
-fireworksLayer.addEventListener("click", (event) => {
-  if (event.target === fireworksLayer || event.target === fireworksCanvas) skipFireworks();
-});
-
 $("#unlock-button").addEventListener("click", () => {
   const code = $("#access-code").value.trim();
   if (code !== ACCESS_CODE) {

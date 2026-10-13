@@ -16,7 +16,6 @@
 | Nút | vô |
 | Lỗi | lệch rồi |
 | Gợi ý | Gợi ý: 6 số ngày tháng năm sinh của em |
-| Nút trên pháo hoa | Bỏ qua |
 
 ## Camera tùy chọn
 
@@ -172,7 +171,7 @@
 
 - Không hiển thị phân tích hoặc tag động.
 - Text khi lưu thành công: Cảm ơn em nhé. Anh nhận được câu trả lời rồi, anh sẽ liên hệ lại sau.
-- Lời chúc: Chúc mừng sinh nhật muộn nhé! Chúc em tuổi mới thật nhiều niềm vui và những điều dịu dàng.
+- Lời chúc: Chúc em tuổi mới luôn rạng ngời nhé.
 - Hình minh họa lời chúc: bánh kem.
 - Pháo hoa chạy khi gửi thành công.
 - Nút: dạ
@@ -193,4 +192,3 @@
 ## Hiệu ứng vào trang
 
 - Pháo hoa ngắn khi mở trang.
-- Nút bỏ qua: Bỏ qua
