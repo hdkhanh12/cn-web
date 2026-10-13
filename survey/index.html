@@ -9,6 +9,10 @@
 </head>
 <body>
   <div id="emoji-layer" aria-hidden="true"></div>
+  <div id="fireworks-layer" class="fireworks-layer" hidden>
+    <canvas id="fireworks-canvas" aria-hidden="true"></canvas>
+    <button id="skip-fireworks" class="button button--ghost" type="button">Bỏ qua</button>
+  </div>
   <div class="site-shell">
     <main id="app" class="app-main">
       <section id="welcome-screen" class="screen screen--welcome" aria-labelledby="welcome-title">
@@ -108,6 +112,10 @@
           <span>✦</span><span>♡</span><span>✧</span><span>✦</span><span>♡</span>
         </div>
         <img class="cat-gif cat-gif--result" src="https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUycjZhb2w0OXk1aHRkZzd3MHI0ZnI3NXBhZnM1OTlubWk2dDhvZTh1cyZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/gdAjJVguYwM0NL0BZN/source.gif" alt="Mèo hoạt hình vẫy tay chúc mừng">
+        <div id="birthday-wish" class="birthday-wish" hidden>
+          <span class="birthday-cake" aria-hidden="true">🎂</span>
+          <p>Chúc mừng sinh nhật muộn nhé! Chúc em tuổi mới thật nhiều niềm vui và những điều dịu dàng.</p>
+        </div>
         <div class="result-message">
           <p id="storage-note" class="lede">Cảm ơn em nhé. Anh nhận được câu trả lời rồi, anh sẽ liên hệ lại sau.</p>
           <button id="acknowledge-button" class="button button--primary" type="button">dạ</button>

@@ -366,6 +366,106 @@ function spawnEmoji(event) {
   window.setTimeout(() => emoji.remove(), 950);
 }
 
+const fireworksLayer = $("#fireworks-layer");
+const fireworksCanvas = $("#fireworks-canvas");
+const fireworksContext = fireworksCanvas.getContext("2d");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let fireworksFrame = 0;
+let fireworksTimer = 0;
+
+function runFireworks(duration = 2600) {
+  if (reducedMotion.matches) return;
+  window.cancelAnimationFrame(fireworksFrame);
+  window.clearTimeout(fireworksTimer);
+  fireworksLayer.hidden = false;
+
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  const resizeCanvas = () => {
+    fireworksCanvas.width = Math.round(window.innerWidth * pixelRatio);
+    fireworksCanvas.height = Math.round(window.innerHeight * pixelRatio);
+    fireworksContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  };
+  resizeCanvas();
+
+  const colors = ["#ef6f61", "#ffd166", "#52c7a5", "#72c9f5", "#ffffff"];
+  const particles = [];
+  let nextBurstAt = 0;
+  const startedAt = performance.now();
+  const burst = () => {
+    const x = window.innerWidth * (0.16 + Math.random() * 0.68);
+    const y = window.innerHeight * (0.12 + Math.random() * 0.42);
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const count = 42 + Math.floor(Math.random() * 20);
+    for (let index = 0; index < count; index += 1) {
+      const angle = (Math.PI * 2 * index) / count + Math.random() * 0.08;
+      const speed = 1.2 + Math.random() * 3.8;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 48 + Math.random() * 32,
+        maxLife: 80,
+        size: 1.4 + Math.random() * 1.8,
+        color
+      });
+    }
+  };
+
+  const draw = (now) => {
+    const elapsed = now - startedAt;
+    if (elapsed >= duration) {
+      fireworksContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      fireworksLayer.hidden = true;
+      fireworksFrame = 0;
+      return;
+    }
+    if (elapsed >= nextBurstAt) {
+      burst();
+      nextBurstAt += 470;
+    }
+
+    fireworksContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    particles.forEach((particle) => {
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      particle.vx *= 0.985;
+      particle.vy = particle.vy * 0.985 + 0.035;
+      particle.life -= 1;
+      fireworksContext.globalAlpha = Math.max(0, particle.life / particle.maxLife);
+      fireworksContext.fillStyle = particle.color;
+      fireworksContext.beginPath();
+      fireworksContext.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+      fireworksContext.fill();
+    });
+    fireworksContext.globalAlpha = 1;
+    for (let index = particles.length - 1; index >= 0; index -= 1) {
+      if (particles[index].life <= 0) particles.splice(index, 1);
+    }
+    fireworksFrame = window.requestAnimationFrame(draw);
+  };
+
+  fireworksFrame = window.requestAnimationFrame(draw);
+  fireworksTimer = window.setTimeout(() => {
+    window.cancelAnimationFrame(fireworksFrame);
+    fireworksContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    fireworksLayer.hidden = true;
+    fireworksFrame = 0;
+  }, duration + 100);
+}
+
+function skipFireworks() {
+  window.cancelAnimationFrame(fireworksFrame);
+  window.clearTimeout(fireworksTimer);
+  fireworksContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  fireworksLayer.hidden = true;
+  fireworksFrame = 0;
+}
+
+$("#skip-fireworks").addEventListener("click", skipFireworks);
+fireworksLayer.addEventListener("click", (event) => {
+  if (event.target === fireworksLayer || event.target === fireworksCanvas) skipFireworks();
+});
+
 $("#unlock-button").addEventListener("click", () => {
   const code = $("#access-code").value.trim();
   if (code !== ACCESS_CODE) {
@@ -400,12 +500,14 @@ $("#quiz-form").addEventListener("submit", async (event) => {
   const result = await submitQuiz();
   $("#next-button").disabled = false;
   if (result.sent) localStorage.setItem(COMPLETED_KEY, new Date().toISOString());
+  $("#birthday-wish").hidden = !result.sent;
   $("#storage-note").textContent = result.sent
     ? "Cảm ơn em nhé. Anh nhận được câu trả lời rồi, anh sẽ liên hệ lại sau."
     : result.alreadyUsed
       ? "Lượt này đã hết hạn rồi nhé."
     : "Bản này đã chạy xong phần giao diện. Cần dán Web App URL vào survey.js để lưu vào Google Sheet.";
   showScreen("result");
+  if (result.sent) runFireworks();
 });
 
 $("#back-button").addEventListener("click", () => {
@@ -505,3 +607,4 @@ document.addEventListener("click", (event) => {
 });
 
 if (localStorage.getItem(COMPLETED_KEY)) showScreen("completed");
+runFireworks();
