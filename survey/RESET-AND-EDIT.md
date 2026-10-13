@@ -47,6 +47,8 @@ Hoặc mở bằng cửa sổ ẩn danh / trình duyệt khác.
 
 - Deploy lại website/Vercel sau khi sửa `index.html`, `survey.css` hoặc `survey.js`.
 - Dùng `Ctrl + F5` để tải lại không dùng cache.
+- Trang dùng đường dẫn asset tuyệt đối `/survey/survey.css` và `/survey/survey.js`,
+  nên mở được cả `/survey` lẫn `/survey/`.
 
 ### Quy trình nhanh sau mỗi lần deploy
 
