@@ -215,7 +215,12 @@ input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4p
 .camera-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 .camera-panel { padding: 18px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); }
 .camera-frame { position: relative; aspect-ratio: 4 / 5; display: grid; place-items: center; overflow: hidden; border-radius: 20px; background: var(--lavender); }
-.camera-frame video, .camera-frame img { width: 100%; height: 100%; object-fit: cover; }
+.camera-frame video, .camera-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: none;
+}
 .camera-placeholder { color: #8b72d6; font-size: 4rem; animation: twinkle 2.4s ease-in-out infinite; }
 .camera-panel-actions { display: flex; gap: 9px; margin-top: 14px; }
 .camera-panel-actions .button { flex: 1; }

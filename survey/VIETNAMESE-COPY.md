@@ -30,6 +30,7 @@
 | Lỗi | Trình duyệt này không hỗ trợ camera. Em vẫn có thể bỏ qua bước này. |
 | Lỗi | Camera chưa được mở. Em có thể thử lại hoặc bỏ qua bước này. |
 | Nút | say cheese |
+| Nút | Chụp lại |
 | Nút | Dùng ảnh này |
 | Consent | Em đồng ý gửi tấm ảnh này kèm câu trả lời cho anh nhé? |
 | Gợi ý | Chỉ khi em chụp và tick vào ô trên thì ảnh mới được gửi đi. |
@@ -45,7 +46,7 @@
 | Nút | Tiếp tục → |
 | Nút cuối | Đã xong, gửi → |
 | Gợi ý bắt buộc | Một câu ngắn là được |
-| Gợi ý tùy chọn | Câu này thích thì trả lời, không thì cứ skip |
+| Gợi ý tùy chọn | Em có thể lựa chọn trả lời hoặc bỏ qua |
 
 ## Danh sách câu hỏi
 
@@ -61,9 +62,9 @@
 - Nhãn trên màn hình: câu 2
 - Tiêu đề: Tâm trạng của em hôm nay thế nào
 - Nhẹ nhàng: Muốn một ngày trôi qua chầm chậm, êm đềm thôi.
-- Có đèn là có mood: Đang nhiều năng lượng, sẵn sàng cho kèo vui bất ngờ!
-- Đang lơ lửng: Hơi ngơ ngơ, không hẳn buồn mà cũng chưa tỉnh táo lắm.
-- Ngọt một chút: Chỉ cần có đồ ăn ngon là đời lại tươi liền.
+- Năng lượng: Đang nhiều năng lượng, sẵn sàng cho kèo vui bất ngờ!
+- lơ lửng: Hơi ngơ ngơ, không hẳn buồn mà cũng chưa tỉnh táo lắm.
+- căng thẳng: một ngày ngập đầu trong công việc, áp lực...
 
 ### 3. Cuối tuần
 
@@ -71,7 +72,7 @@
 - Tiêu đề: Cuối tuần rảnh rỗi thì em nghiêng về kèo nào hơn?
 - Cà phê: Ngồi quán quen xinh xinh, buôn chuyện không vội vã.
 - Đi dạo: Lượn lờ đâu đó, đi đâu cũng được miễn là mát trời có gió.
-- Xem phim: Cuộn trong chăn, bật phim hay, thêm đồ ăn vặt là chuẩn bài.
+- Xem phim: Ra rạp hoặc kiếm một chỗ thật chill để xem cùng nhau.
 - Đi ăn: Đi săn món ngon, ăn ngon là ưu tiên số một!
 - Ở nhà: Nằm nhà sạc pin trong góc bình yên của riêng mình.
 - Cho phép chọn tối đa 2 đáp án.
@@ -101,6 +102,7 @@
 - Dẫn đi ăn: Rủ đi ăn món ngon, no bụng là thấy đỡ hơn một nửa rồi.
 - Để em yên tĩnh: Ở bên cạnh nhưng không hỏi dồn dập, để em có khoảng lặng.
 - Làm em cười: Kể chuyện ngớ ngẩn hay pha trò cho em bật cười.
+- Cho phép chọn tối đa 2 đáp án.
 
 ### 7. Nạp lại năng lượng
 
@@ -135,7 +137,7 @@
 ### 12. Thiện cảm
 
 - Tiêu đề: Điều gì khiến em dễ có thiện cảm với một người?
-- Placeholder: Ví dụ: nói chuyện có duyên, tinh tế, thật thà...
+- Không có placeholder.
 
 ### 13. Đi tới nơi mới
 
@@ -144,24 +146,26 @@
 - Góc chụp hình đẹp: Mắt tự động căn góc xem chỗ nào lên hình xinh.
 - Mấy con ngõ nhỏ: Thích rẽ bừa vào ngõ ngách xem có gì hay ho ẩn giấu không.
 - Nhịp sống con người: Ngồi ngắm dòng người và xem người bản địa sống ra sao.
+- Cho phép chọn tối đa 2 đáp án.
 
 ### 14. Món quà nhỏ
 
-- Tiêu đề: Một món quà nhỏ nào sẽ khiến tim em "rung rinh"?
+- Tiêu đề: Một món quà nhỏ nào em thấy dễ thương?
 - Một mẩu giấy viết tay: Mấy dòng chữ tay mộc mạc mà ấm áp, giữ hoài được.
 - Một món đồ handmade: Một món nhỏ được tự tay làm, nhìn là biết người tặng đã dành thời gian.
 - Món ăn vặt: Đang thèm mà có người mua đúng món đem tới.
-- Một bông hoa / bó hoa nhỏ: Cầm trên tay hay cắm vào lọ là thấy đời thơ mộng hẳn.
+- Một bó hoa nhỏ: Cầm trên tay mà thấy đời thơ mộng hẳn.
+- Cho phép chọn tối đa 2 đáp án.
 
 ### 15. Đang mong chờ
 
 - Tiêu đề: Dạo gần đây em có đang háo hức chờ đợi điều gì không?
-- Placeholder: Kể sương sương một câu nếu em muốn nha...
+- Placeholder: Kể sương sương một câu nếu em muốn nhé...
 
-### 16. Email
+### 16. Email / số điện thoại
 
-- Tiêu đề: Để lại email nếu em muốn nhận một lá thư nhắn gửi sau quiz nha!
-- Placeholder: địa chỉ email của em nè...
+- Tiêu đề: Để lại email hoặc số điện thoại nếu em muốn nhận một lá thư nhắn gửi sau quiz nhé!
+- Placeholder: email / sđt của em nè...
 
 ## Màn kết thúc / Lưu kết quả
 

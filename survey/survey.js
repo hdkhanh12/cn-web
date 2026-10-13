@@ -18,9 +18,9 @@ const questions = [
     title: "Tâm trạng của em hôm nay thế nào",
     options: [
       ["🌷", "Nhẹ nhàng", "Muốn một ngày trôi qua chầm chậm, êm đềm thôi."],
-      ["🪩", "Có đèn là có mood", "Đang nhiều năng lượng, sẵn sàng cho kèo vui bất ngờ!"],
-      ["☁️", "Đang lơ lửng", "Hơi ngơ ngơ, không hẳn buồn mà cũng chưa tỉnh táo lắm."],
-      ["🍓", "Ngọt một chút", "Chỉ cần có đồ ăn ngon là đời lại tươi liền."]
+      ["🪩", "Năng lượng", "Đang nhiều năng lượng, sẵn sàng cho kèo vui bất ngờ!"],
+      ["☁️", "lơ lửng", "Hơi ngơ ngơ, không hẳn buồn mà cũng chưa tỉnh táo lắm."],
+      ["🍓", "căng thẳng", "một ngày ngập đầu trong công việc, áp lực..."]
     ]
   },
   {
@@ -31,7 +31,7 @@ const questions = [
     options: [
       ["☕", "Cà phê", "Ngồi quán quen xinh xinh, buôn chuyện không vội vã."],
       ["🚶", "Đi dạo", "Lượn lờ đâu đó, đi đâu cũng được miễn là mát trời có gió."],
-      ["🎬", "Xem phim", "Cuộn trong chăn, bật phim hay, thêm đồ ăn vặt là chuẩn bài."],
+      ["🎬", "Xem phim", "Ra rạp hoặc kiếm một chỗ thật chill để xem cùng nhau."],
       ["🍜", "Đi ăn", "Đi săn món ngon, ăn ngon là ưu tiên số một!"],
       ["🏠", "Ở nhà", "Nằm nhà sạc pin trong góc bình yên của riêng mình."]
     ]
@@ -61,7 +61,8 @@ const questions = [
     ]
   },
   {
-    type: "single",
+    type: "multi",
+    max: 2,
     kicker: "câu 6 · lúc hơi mệt",
     title: "Những lúc hơi mệt hay tuột mood, em muốn được quan tâm thế nào?",
     options: [
@@ -119,10 +120,11 @@ const questions = [
     required: false,
     kicker: "câu 12 · thiện cảm",
     title: "Điều gì khiến em dễ có thiện cảm với một người?",
-    placeholder: "Ví dụ: nói chuyện có duyên, tinh tế, thật thà..."
+    placeholder: ""
   },
   {
-    type: "single",
+    type: "multi",
+    max: 2,
     kicker: "câu 13 · đi tới nơi mới",
     title: "Lạc tới một nơi hoàn toàn mới, mắt em sẽ bị hút vào đâu đầu tiên?",
     options: [
@@ -133,14 +135,15 @@ const questions = [
     ]
   },
   {
-    type: "single",
+    type: "multi",
+    max: 2,
     kicker: "câu 14 · món quà nhỏ",
-    title: "Một món quà nhỏ nào sẽ khiến tim em “rung rinh”?",
+    title: "Một món quà nhỏ nào em thấy dễ thương?",
     options: [
       ["✉️", "Một mẩu giấy viết tay", "Mấy dòng chữ tay mộc mạc mà ấm áp, giữ hoài được."],
       ["🧶", "Một món đồ handmade", "Một món nhỏ được tự tay làm, nhìn là biết người tặng đã dành thời gian."],
       ["🍪", "Món ăn vặt", "Đang thèm mà có người mua đúng món đem tới."],
-      ["🌼", "Một bông hoa / bó hoa nhỏ", "Cầm trên tay hay cắm vào lọ là thấy đời thơ mộng hẳn."]
+      ["🌼", "Một bó hoa nhỏ", "Cầm trên tay mà thấy đời thơ mộng hẳn."]
     ]
   },
   {
@@ -148,14 +151,14 @@ const questions = [
     required: false,
     kicker: "câu 15 · đang mong chờ",
     title: "Dạo gần đây em có đang háo hức chờ đợi điều gì không?",
-    placeholder: "Kể sương sương một câu nếu em muốn nha..."
+    placeholder: "Kể sương sương một câu nếu em muốn nhé..."
   },
   {
-    type: "email",
+    type: "contact",
     required: false,
-    kicker: "câu 16 · email",
-    title: "Để lại email nếu em muốn nhận một lá thư nhắn gửi sau quiz nha!",
-    placeholder: "địa chỉ email của em nè..."
+    kicker: "câu 16 · email / sđt",
+    title: "Để lại email hoặc số điện thoại nếu em muốn nhận một lá thư nhắn gửi sau quiz nhé!",
+    placeholder: "email / sđt của em nè..."
   }
 ];
 
@@ -211,11 +214,11 @@ function renderQuestion() {
     <h2 id="question-title" class="question-title">${question.title}</h2>
   `;
 
-  if (question.type === "text" || question.type === "email") {
-    const control = question.type === "email"
-      ? `<input id="open-answer" class="email-input" type="email" maxlength="160" placeholder="${question.placeholder}" aria-label="${question.title}">`
+  if (question.type === "text" || question.type === "email" || question.type === "contact") {
+    const control = question.type === "email" || question.type === "contact"
+      ? `<input id="open-answer" class="email-input" type="${question.type === "contact" ? "text" : "email"}" maxlength="160" placeholder="${question.placeholder}" aria-label="${question.title}"${question.type === "contact" ? ' autocomplete="off" inputmode="text"' : ""}>`
       : `<textarea id="open-answer" maxlength="240" placeholder="${question.placeholder}" aria-label="${question.title}"></textarea>`;
-    const helper = question.required ? "Một câu ngắn là được" : "Câu này thích thì trả lời, không thì cứ skip";
+    const helper = question.required ? "Một câu ngắn là được" : "Em có thể lựa chọn trả lời hoặc bỏ qua";
     host.insertAdjacentHTML("beforeend", `${control}<p class="helper-note">${helper}</p>`);
     $("#open-answer").value = answers[currentIndex] || "";
     if (question.type === "email") $("#open-answer").setAttribute("inputmode", "email");
@@ -262,7 +265,7 @@ function renderQuestion() {
 
 function saveCurrentAnswer() {
   const question = questions[currentIndex];
-  if (question.type === "text" || question.type === "email") {
+  if (question.type === "text" || question.type === "email" || question.type === "contact") {
     answers[currentIndex] = $("#open-answer").value.trim();
   }
 }
@@ -272,6 +275,7 @@ function hasAnswer() {
   const value = answers[currentIndex];
   if (question.type === "text") return question.required ? Boolean(value) : true;
   if (question.type === "email") return !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  if (question.type === "contact") return !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || /^[+()\d][+()\d\s.-]{6,}$/.test(value);
   if (question.type === "single") return Number.isInteger(value);
   return Array.isArray(value) && value.length > 0;
 }
@@ -411,13 +415,13 @@ $("#back-button").addEventListener("click", () => {
   renderQuestion();
 });
 
-$("#start-camera-button").addEventListener("click", async () => {
+async function startCamera() {
   const error = $("#camera-error");
   error.hidden = true;
   if (!navigator.mediaDevices?.getUserMedia) {
     error.textContent = "Trình duyệt này không hỗ trợ camera. Em vẫn có thể bỏ qua bước này.";
     error.hidden = false;
-    return;
+    return false;
   }
   try {
     cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
@@ -427,11 +431,17 @@ $("#start-camera-button").addEventListener("click", async () => {
     $("#camera-placeholder").hidden = true;
     $("#start-camera-button").hidden = true;
     $("#capture-button").hidden = false;
+    $("#retake-button").hidden = true;
+    $("#continue-camera-button").hidden = true;
+    return true;
   } catch (cameraError) {
     error.textContent = "Camera chưa được mở. Em có thể thử lại hoặc bỏ qua bước này.";
     error.hidden = false;
+    return false;
   }
-});
+}
+
+$("#start-camera-button").addEventListener("click", startCamera);
 
 $("#capture-button").addEventListener("click", () => {
   const video = $("#camera-video");
@@ -446,11 +456,25 @@ $("#capture-button").addEventListener("click", () => {
   preview.hidden = false;
   video.hidden = true;
   photoConsent = false;
+  $("#photo-consent").checked = false;
   $("#photo-consent-row").hidden = false;
   $("#capture-button").hidden = true;
+  $("#retake-button").hidden = false;
   $("#continue-camera-button").hidden = false;
   $("#continue-camera-button").disabled = true;
   stopCamera();
+});
+
+$("#retake-button").addEventListener("click", async () => {
+  photoDataUrl = "";
+  photoConsent = false;
+  $("#photo-consent").checked = false;
+  $("#photo-consent-row").hidden = true;
+  $("#camera-preview").hidden = true;
+  $("#camera-placeholder").hidden = false;
+  $("#retake-button").hidden = true;
+  $("#continue-camera-button").hidden = true;
+  await startCamera();
 });
 
 $("#photo-consent").addEventListener("change", (event) => {
