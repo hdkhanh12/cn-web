@@ -19,8 +19,8 @@ const questions = [
     options: [
       ["🌷", "Nhẹ nhàng", "Muốn một ngày trôi qua chầm chậm, êm đềm thôi."],
       ["🪩", "Năng lượng", "Đang nhiều năng lượng, sẵn sàng cho kèo vui bất ngờ!"],
-      ["☁️", "lơ lửng", "Hơi ngơ ngơ, không hẳn buồn mà cũng chưa tỉnh táo lắm."],
-      ["🍓", "căng thẳng", "một ngày ngập đầu trong công việc, áp lực..."]
+      ["☁️", "Lơ lửng", "Hơi ngơ ngơ, không hẳn buồn mà cũng chưa tỉnh táo lắm."],
+      ["🍓", "Căng thẳng", "một ngày ngập đầu trong công việc, áp lực..."]
     ]
   },
   {
@@ -140,7 +140,7 @@ const questions = [
     kicker: "câu 14 · món quà nhỏ",
     title: "Một món quà nhỏ nào em thấy dễ thương?",
     options: [
-      ["✉️", "Một mẩu giấy viết tay", "Mấy dòng chữ tay mộc mạc mà ấm áp, giữ hoài được."],
+      ["✉️", "Một mẩu thư", "Mấy dòng chữ tay mộc mạc mà ấm áp, giữ hoài được."],
       ["🧶", "Một món đồ handmade", "Một món nhỏ được tự tay làm, nhìn là biết người tặng đã dành thời gian."],
       ["🍪", "Món ăn vặt", "Đang thèm mà có người mua đúng món đem tới."],
       ["🌼", "Một bó hoa nhỏ", "Cầm trên tay mà thấy đời thơ mộng hẳn."]
@@ -450,7 +450,12 @@ $("#capture-button").addEventListener("click", () => {
   if (!video.videoWidth || !video.videoHeight) return;
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+  const context = canvas.getContext("2d");
+  context.save();
+  context.translate(canvas.width, 0);
+  context.scale(-1, 1);
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  context.restore();
   photoDataUrl = canvas.toDataURL("image/jpeg", 0.82);
   preview.src = photoDataUrl;
   preview.hidden = false;

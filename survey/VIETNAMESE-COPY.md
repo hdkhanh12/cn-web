@@ -7,8 +7,8 @@
 | Vị trí | Text |
 |---|---|
 | Dòng nhỏ | *(Bỏ)* |
-| Tiêu đề | Trò chuyện với em một chút được không? |
-| Mô tả | j4f để hiểu nhau hơn chút |
+| Tiêu đề | Trò chuyện với em một chút, được không? |
+| Mô tả | để hiểu nhau hơn |
 | Pill | 16 câu hỏi - chọn theo ý em - có thể skip |
 | Nhãn panel | password |
 | Nhãn ô mã | nhập mã để vào nhé |
@@ -21,7 +21,7 @@
 
 | Vị trí | Text |
 |---|---|
-| Tiêu đề | Làm một tấm selfie mở màn không nè? |
+| Tiêu đề | Làm một tấm selfie mở màn nhé? |
 | Mô tả | Không bắt buộc. Nếu em chụp và tick gửi thì anh mới thấy ảnh, còn không thì cứ bấm bỏ qua nhé. |
 | Khối thông báo | Lưu ý nhỏ |
 | Khối thông báo | Trình duyệt có thể sẽ hỏi mở camera nhé |
@@ -63,8 +63,8 @@
 - Tiêu đề: Tâm trạng của em hôm nay thế nào
 - Nhẹ nhàng: Muốn một ngày trôi qua chầm chậm, êm đềm thôi.
 - Năng lượng: Đang nhiều năng lượng, sẵn sàng cho kèo vui bất ngờ!
-- lơ lửng: Hơi ngơ ngơ, không hẳn buồn mà cũng chưa tỉnh táo lắm.
-- căng thẳng: một ngày ngập đầu trong công việc, áp lực...
+- Lơ lửng: Hơi ngơ ngơ, không hẳn buồn mà cũng chưa tỉnh táo lắm.
+- Căng thẳng: một ngày ngập đầu trong công việc, áp lực...
 
 ### 3. Cuối tuần
 
@@ -151,7 +151,7 @@
 ### 14. Món quà nhỏ
 
 - Tiêu đề: Một món quà nhỏ nào em thấy dễ thương?
-- Một mẩu giấy viết tay: Mấy dòng chữ tay mộc mạc mà ấm áp, giữ hoài được.
+- Một mẩu thư: Mấy dòng chữ tay mộc mạc mà ấm áp, giữ hoài được.
 - Một món đồ handmade: Một món nhỏ được tự tay làm, nhìn là biết người tặng đã dành thời gian.
 - Món ăn vặt: Đang thèm mà có người mua đúng món đem tới.
 - Một bó hoa nhỏ: Cầm trên tay mà thấy đời thơ mộng hẳn.
