@@ -170,7 +170,7 @@
 ## Màn kết thúc / Lưu kết quả
 
 - Không hiển thị phân tích hoặc tag động.
-- Text khi lưu thành công: Cảm ơn em nhé. Anh nhận được câu trả lời rồi, anh sẽ liên hệ lại sau.
+- Text khi lưu thành công: Anh cảm ơn em nhé...
 - Lời chúc: Chúc em tuổi mới luôn rạng ngời nhé.
 - Hình minh họa lời chúc: bánh kem.
 - Pháo hoa chạy khi gửi thành công.
@@ -185,7 +185,7 @@
 
 ## Màn đã hoàn thành
 
-- Dòng nhỏ: anh nhận được rồi nhé
+- Dòng nhỏ: anh xin nhận thông tin
 - Tiêu đề: Hân hạnh được làm quen
 - Mô tả: Nhắn anh nếu em có câu hỏi nào khác nhé
 

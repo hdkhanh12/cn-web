@@ -489,7 +489,7 @@ $("#quiz-form").addEventListener("submit", async (event) => {
   if (result.sent) localStorage.setItem(COMPLETED_KEY, new Date().toISOString());
   $("#birthday-wish").hidden = !result.sent;
   $("#storage-note").textContent = result.sent
-    ? "Cảm ơn em nhé. Anh nhận được câu trả lời rồi, anh sẽ liên hệ lại sau."
+    ? "Anh cảm ơn em nhé..."
     : result.alreadyUsed
       ? "Lượt này đã hết hạn rồi nhé."
     : "Bản này đã chạy xong phần giao diện. Cần dán Web App URL vào survey.js để lưu vào Google Sheet.";
