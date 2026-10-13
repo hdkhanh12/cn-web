@@ -170,7 +170,7 @@
 ## Màn kết thúc / Lưu kết quả
 
 - Không hiển thị phân tích hoặc tag động.
-- Text khi lưu thành công: Anh cảm ơn em nhé...
+- Text khi lưu thành công: Anh cảm ơn em. Anh nhận được câu trả lời rồi, anh sẽ liên hệ lại sau.
 - Lời chúc: Chúc em tuổi mới luôn rạng ngời nhé.
 - Hình minh họa lời chúc: bánh kem.
 - Pháo hoa chạy khi gửi thành công.
