@@ -3,81 +3,145 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f6f4ec">
+  <meta name="theme-color" content="#efece1">
   <meta name="description" content="Một lá thư nhỏ sau buổi hẹn.">
   <title>Một buổi tối, được giữ lại</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <div class="page-grain" aria-hidden="true"></div>
-  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
-  <main class="letter-page">
+  <div class="paper-grain" aria-hidden="true"></div>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+
+  <main class="experience" id="experience" data-index="0">
     <header class="masthead">
-      <a class="wordmark" href="#top" aria-label="Đầu trang">afterglow<span>®</span></a>
-      <p class="masthead-note">một lá thư, sau buổi hẹn</p>
-      <p class="issue-mark">FIELD NOTE <b>01</b></p>
+      <a class="wordmark" href="./" aria-label="Afterglow">afterglow<span>®</span></a>
+      <p class="masthead-note">a letter after the date</p>
+      <div class="masthead-tools">
+        <span class="masthead-number">FIELD NOTE <b>01</b></span>
+        <button id="music-toggle" class="music-toggle" type="button" aria-label="Bật nhạc nền" title="Bật nhạc nền" aria-pressed="false" hidden>
+          <span class="music-disc" aria-hidden="true">♫</span>
+        </button>
+      </div>
     </header>
 
-    <section class="opening" id="top" aria-labelledby="headline">
-      <div class="opening-copy reveal reveal--copy">
-        <p class="eyebrow"><span class="eyebrow-dot"></span> gửi em, sau tối hôm ấy</p>
-        <h1 id="headline">Một buổi tối,<br><em>được giữ lại.</em></h1>
-        <p class="intro" id="letter-note"></p>
-        <div class="opening-rule" aria-hidden="true"><span></span><span></span><span></span></div>
-        <p class="small-note">một chiếc note nhỏ thôi, không cần trả lời ngay đâu</p>
-      </div>
-
-      <figure class="memory-frame reveal reveal--photo" aria-label="Bức ảnh kỷ niệm">
-        <div class="memory-art" id="memory-art" aria-hidden="true">
-          <span class="art-index">EVENING<br>EDITION</span>
-          <span class="art-sun"></span>
-          <span class="art-line art-line--one"></span>
-          <span class="art-line art-line--two"></span>
-          <span class="art-star art-star--one">✳</span>
-          <span class="art-star art-star--two">✦</span>
-          <span class="art-copy">somewhere<br>between hello<br>and goodnight</span>
-          <span class="art-stamp">A<br>GOOD<br>EVENING</span>
+    <section class="book-area" aria-label="Lá thư Afterglow">
+      <div class="book-wrap">
+        <div class="book-shell" id="book" data-direction="forward">
+          <div class="book-pages" aria-live="polite" aria-atomic="true">
+            <article class="page-current" id="page-current"></article>
+            <div class="page-turn" id="page-turn" aria-hidden="true" hidden>
+              <div class="page-face page-face--front" id="page-turn-front"></div>
+              <div class="page-face page-face--back" id="page-turn-back"></div>
+            </div>
+          </div>
+          <span class="book-spine" aria-hidden="true"></span>
+          <span class="book-edge" aria-hidden="true"></span>
         </div>
-        <img id="memory-photo" alt="Ảnh kỷ niệm buổi hẹn" hidden>
-        <figcaption><span id="photo-caption">ảnh / 01</span><span>kept with care</span></figcaption>
-      </figure>
-      <span class="margin-stamp" aria-hidden="true">POST<br>DATE<br>NOTE</span>
-    </section>
 
-    <section class="memory-note reveal" id="memory-section" hidden aria-labelledby="memory-title">
-      <p class="section-index">01 <span>—</span> THE LITTLE THING</p>
-      <div>
-        <h2 id="memory-title">Điều anh muốn nhớ</h2>
-        <p id="memory-copy"></p>
-      </div>
-      <span class="memory-doodle" aria-hidden="true">↗</span>
-    </section>
-
-    <section class="invitation reveal" aria-labelledby="invitation-title">
-      <div class="invitation-label"><span class="invitation-spark">✳</span> NEXT PAGE?</div>
-      <div class="invitation-main">
-        <h2 id="invitation-title">Nếu em cũng thấy vui,<br><em>mình hẹn thêm một buổi nhé?</em></h2>
-        <p>Không cần quyết định ngay. Anh chỉ muốn em biết là anh sẵn lòng.</p>
-      </div>
-      <div class="invitation-action">
-        <a id="reply-link" class="reply-button" href="#reply">
-          <span>Nhắn anh một câu</span><span aria-hidden="true">↗</span>
-        </a>
-        <span class="reply-hint" id="reply-hint">Cứ thong thả nhé.</span>
+        <nav class="page-nav" id="page-nav" aria-label="Điều hướng trang" hidden>
+          <button class="page-nav-button" id="previous-page" type="button" aria-label="Trang trước" title="Trang trước" disabled>
+            <span aria-hidden="true">←</span>
+          </button>
+          <span class="page-counter" id="page-counter" aria-live="polite">BÌA</span>
+          <button class="page-nav-button" id="next-page" type="button" aria-label="Trang tiếp theo" title="Trang tiếp theo">
+            <span aria-hidden="true">→</span>
+          </button>
+        </nav>
       </div>
     </section>
 
-    <footer class="colophon" id="reply">
-      <span>made after a good evening</span>
+    <footer class="colophon">
+      <span>kept with care</span>
       <span class="colophon-mark" aria-hidden="true">✳</span>
       <span>no rush, just a note</span>
     </footer>
   </main>
-  <button id="music-toggle" class="music-toggle" type="button" aria-label="Bật nhạc nền" title="Bật nhạc nền" aria-pressed="false" hidden>
-    <span class="music-disc" aria-hidden="true">♫</span>
-  </button>
+
   <audio id="background-music" preload="none" loop></audio>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <template id="cover-template">
+    <div class="page page-cover">
+      <div class="cover-ink" aria-hidden="true">
+        <span class="cover-rule cover-rule--one"></span>
+        <span class="cover-rule cover-rule--two"></span>
+        <span class="cover-mark">01</span>
+      </div>
+      <p class="cover-kicker">AFTERGLOW <span>/</span> FIELD NOTE</p>
+      <div class="cover-title-group">
+        <p class="cover-overline">SAU BUỔI HẸN</p>
+        <h1>Một buổi tối,<br><em>được giữ lại.</em></h1>
+        <p class="cover-subtitle">Anh để dành vài dòng cho em.</p>
+      </div>
+      <button class="open-book-button" type="button" data-turn-next>
+        <span>Mở thư</span><span class="open-arrow" aria-hidden="true">↗</span>
+      </button>
+      <span class="cover-imprint">A SMALL NOTE<br>MADE AFTER A GOOD EVENING</span>
+    </div>
+  </template>
+
+  <template id="letter-template">
+    <div class="page page-letter">
+      <header class="page-header">
+        <span>01 <i>/</i> LỜI NHẮN</span>
+        <span class="page-header-mark" aria-hidden="true">✳</span>
+      </header>
+      <div class="letter-copy">
+        <h2>Gửi em,</h2>
+        <p class="letter-note"></p>
+        <div class="memory-note" hidden>
+          <span class="memory-rule" aria-hidden="true"></span>
+          <h3>Điều anh muốn nhớ</h3>
+          <p class="memory-copy"></p>
+        </div>
+      </div>
+      <div class="signature"><span>—</span> Anh</div>
+      <footer class="page-footer"><span>AFTERGLOW</span><span>01</span></footer>
+    </div>
+  </template>
+
+  <template id="photo-template">
+    <div class="page page-photo">
+      <header class="page-header">
+        <span>02 <i>/</i> ẢNH KỶ NIỆM</span>
+        <span class="photo-stamp">KEPT<br>WITH CARE</span>
+      </header>
+      <figure class="photo-mat">
+        <div class="photo-art" aria-hidden="true">
+          <span class="photo-art-index">EVENING EDITION</span>
+          <span class="photo-art-line photo-art-line--one"></span>
+          <span class="photo-art-line photo-art-line--two"></span>
+          <span class="photo-art-copy">somewhere<br>between hello<br>and goodnight</span>
+          <span class="photo-art-stamp">A GOOD<br>EVENING</span>
+        </div>
+        <img class="memory-photo" alt="Ảnh kỷ niệm buổi hẹn" hidden>
+        <figcaption><span class="photo-caption">ảnh / 01</span><span>kept with care</span></figcaption>
+      </figure>
+      <p class="photo-note">Một khoảnh khắc nhỏ, để dành ở đây.</p>
+      <footer class="page-footer"><span>AFTERGLOW</span><span>02</span></footer>
+    </div>
+  </template>
+
+  <template id="invitation-template">
+    <div class="page page-invitation">
+      <header class="page-header">
+        <span>03 <i>/</i> LỜI MỜI</span>
+        <span class="invitation-spark" aria-hidden="true">✳</span>
+      </header>
+      <div class="invitation-copy">
+        <p class="invitation-overline">NEXT PAGE?</p>
+        <h2>Nếu em cũng thấy vui,<br><em>mình hẹn thêm một buổi nhé?</em></h2>
+        <p class="invitation-text">Không cần quyết định ngay. Anh chỉ muốn em biết là anh sẵn lòng.</p>
+        <a class="reply-button" href="#reply">
+          <span>Nhắn anh một câu</span><span aria-hidden="true">↗</span>
+        </a>
+        <p class="reply-hint">Cứ thong thả nhé.</p>
+      </div>
+      <div class="invitation-imprint" aria-hidden="true">✳</div>
+      <footer class="page-footer"><span>AFTERGLOW</span><span>03</span></footer>
+    </div>
+  </template>
+
   <script src="./config.js"></script>
   <script src="./app.js"></script>
 </body>

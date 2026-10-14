@@ -1,65 +1,67 @@
-# Nội dung hiển thị trên trang
-
-Bản này liệt kê text mặc định ở trang Afterglow, gồm cả các nhãn tiếng Anh trong artwork và thông báo chỉ xuất hiện khi tương tác.
-
-## Tiêu đề trình duyệt
-
-- Một buổi tối, được giữ lại
-- Mô tả trang: Một lá thư nhỏ sau buổi hẹn.
+# Toàn bộ text trên trang
 
 ## Đầu trang
 
 - afterglow®
-- một lá thư, sau buổi hẹn
+- a letter after the date
 - FIELD NOTE 01
 
-## Lời mở đầu
+## Bìa
 
-- gửi em, sau tối hôm ấy
+- AFTERGLOW / FIELD NOTE
+- SAU BUỔI HẸN
 - Một buổi tối, được giữ lại.
+- Anh để dành vài dòng cho em.
+- Mở thư
+- A SMALL NOTE MADE AFTER A GOOD EVENING
+
+## Trang 01 — Lời nhắn
+
+- 01 / LỜI NHẮN
+- Gửi em,
 - Cảm ơn em đã dành thời gian cho anh hôm nay. Anh vui vì được gặp em.
-- một chiếc note nhỏ thôi, không cần trả lời ngay đâu
+- Điều anh muốn nhớ — chỉ hiện khi `memory` trong `config.js` có nội dung.
+- Nội dung kỷ niệm — giá trị của `memory` trong `config.js`, mặc định để trống.
+- — Anh
+- AFTERGLOW / 01
 
-## Artwork / ảnh kỷ niệm
+## Trang 02 — Ảnh kỷ niệm
 
+- 02 / ẢNH KỶ NIỆM
+- KEPT WITH CARE
 - EVENING EDITION
 - somewhere between hello and goodnight
 - A GOOD EVENING
-- POST DATE NOTE
 - ảnh / 01
 - kept with care
-- Văn bản thay thế cho ảnh: Ảnh kỷ niệm buổi hẹn
+- Một khoảnh khắc nhỏ, để dành ở đây.
+- Văn bản thay thế ảnh: Ảnh kỷ niệm buổi hẹn
+- AFTERGLOW / 02
 
-## Kỷ niệm (chỉ hiện khi có nội dung)
+## Trang 03 — Lời mời
 
-- 01 — THE LITTLE THING
-- Điều anh muốn nhớ
-- Nội dung mặc định: để trống
-
-## Lời mời
-
-- ✳ NEXT PAGE?
+- 03 / LỜI MỜI
+- NEXT PAGE?
 - Nếu em cũng thấy vui, mình hẹn thêm một buổi nhé?
 - Không cần quyết định ngay. Anh chỉ muốn em biết là anh sẵn lòng.
 - Nhắn anh một câu
 - Cứ thong thả nhé.
+- AFTERGLOW / 03
 
-## Chân trang
+## Điều khiển và thông báo
 
-- made after a good evening
-- no rush, just a note
-
-## Nhãn điều khiển và thông báo
-
-- Nút nhạc khi đang dừng: Bật nhạc nền
-- Nút nhạc khi đang phát: Tắt nhạc nền
-- Khi chép lời nhắn: Đã chép một lời nhắn gợi ý. Gửi khi em thấy tiện nhé.
+- Nút trang trước: `Trang trước` (nhãn trợ năng)
+- Nút trang tiếp: `Trang tiếp theo` (nhãn trợ năng)
+- Chỉ báo: `TRANG 01 / 03`, `TRANG 02 / 03`, `TRANG 03 / 03`
+- Nút nhạc khi dừng: `Bật nhạc nền` (nhãn trợ năng)
+- Nút nhạc khi phát: `Tắt nhạc nền` (nhãn trợ năng)
 - Lời nhắn được chép: Cảm ơn anh vì buổi hẹn hôm nay nhé.
-- Nếu chép vào clipboard không thành công, trang hiện chính lời nhắn đó.
-- Nếu không tải được nhạc: Trình duyệt chưa phát được file nhạc. Kiểm tra lại đường dẫn nhé.
+- Thông báo chép thành công: Đã chép một lời nhắn gợi ý. Gửi khi em thấy tiện nhé.
+- Nếu clipboard không khả dụng, trang hiện lời nhắn để em có thể chép thủ công.
+- Nếu không phát được nhạc: Trình duyệt chưa phát được file nhạc. Kiểm tra lại đường dẫn nhé.
 
-## Chỗ sửa text
+## Chỗ sửa
 
-- Nội dung, kỷ niệm, chú thích ảnh: `config.js`.
-- Các tiêu đề, nhãn, lời mời và chân trang: `index.html`.
-- Thông báo khi bấm nút: `app.js`.
+- Lời nhắn, kỷ niệm, chú thích ảnh và nhạc: `config.js`.
+- Nội dung từng trang: các `<template>` trong `index.html`.
+- Thông báo tương tác: `app.js`.
