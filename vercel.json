@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/survey",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/survey/:path*",
+      "destination": "/",
+      "permanent": false
+    }
+  ]
+}
