@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/haanhie",
+      "destination": "/haanhie/",
+      "permanent": true
+    },
+    {
       "source": "/survey",
       "destination": "/",
       "permanent": false
@@ -9,6 +14,16 @@
       "source": "/survey/:path*",
       "destination": "/",
       "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/haanhie/",
+      "destination": "/card1510/"
+    },
+    {
+      "source": "/haanhie/:path*",
+      "destination": "/card1510/:path*"
     }
   ]
 }
