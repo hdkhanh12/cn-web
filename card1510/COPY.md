@@ -1,5 +1,16 @@
 # Toàn bộ text trên trang
 
+## Màn mở thư
+
+- no 01
+- Lá thư dành riêng cho em
+- Nhập mật khẩu để mở nhé.
+- Mật khẩu
+- Vào thư
+- Khi mật khẩu sai: Mật khẩu chưa đúng, em thử lại nhé.
+- Khi không kết nối được: Chưa kết nối được. Em thử lại sau nhé.
+- Khi phiên hết hạn: Phiên truy cập đã hết hạn. Nhập lại mật khẩu để mở thư nhé.
+
 ## Bìa
 
 - no 01
@@ -45,6 +56,8 @@
 - Nếu không lưu được: Anh chưa nhận được phản hồi. Em bấm gửi lại giúp anh nhé.
 - Nếu không xác nhận được kết nối: Mất kết nối rồi. Để anh kiểm tra lại sau nha.
 - Sau khi đã gửi: Đã gửi rồi
+- Trạng thái sau khi gửi: Em đã gửi lời nhắn rồi. Cảm ơn em nhé.
+- Khi mở trang cuối trước lúc gửi: Trang cuối sẽ mở sau khi em gửi câu trả lời nhé.
 
 ## Trang 5 — Kết thúc
 

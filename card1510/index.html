@@ -6,15 +6,15 @@
   <meta name="theme-color" content="#e7edf6">
   <meta name="description" content="Một lá thư sau buổi hẹn.">
   <title>Lần đầu gặp gỡ</title>
-  <link rel="stylesheet" href="./styles.css?v=4">
+  <link rel="stylesheet" href="./styles.css?v=5">
 </head>
 <body>
   <main class="experience" id="experience" aria-label="Lá thư gửi em">
     <div class="scene-current" id="scene-current" aria-live="polite"></div>
     <div class="scene-turn" id="scene-turn" aria-hidden="true" hidden></div>
-    <div class="progress" id="progress" aria-hidden="true"></div>
+    <div class="progress" id="progress" aria-hidden="true" hidden></div>
     <button class="music-toggle" id="music-toggle" type="button" aria-label="Bật nhạc" title="Bật nhạc" aria-pressed="false" hidden>♫</button>
-    <nav class="page-nav" aria-label="Điều hướng lá thư">
+    <nav class="page-nav" aria-label="Điều hướng lá thư" hidden>
       <button class="nav-arrow" id="previous-page" type="button" aria-label="Trang trước" title="Trang trước" disabled>←</button>
       <span class="page-counter" id="page-counter">01 / 06</span>
       <button class="nav-arrow" id="next-page" type="button" aria-label="Trang tiếp" title="Trang tiếp">→</button>
@@ -22,6 +22,22 @@
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </main>
   <audio id="background-music" preload="none" loop></audio>
+
+  <template id="access-template">
+    <section class="scene scene-access" aria-label="Mở thư">
+      <div class="access-body">
+        <span class="cover-index">no 01</span>
+        <h1>Lá thư dành riêng cho em</h1>
+        <p>Nhập mật khẩu để mở nhé.</p>
+        <form id="access-form">
+          <label for="access-password">Mật khẩu</label>
+          <input id="access-password" name="password" type="password" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+          <button class="primary-button" type="submit">Vào thư <span aria-hidden="true">↗</span></button>
+          <p id="access-status" class="access-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </template>
 
   <template id="cover-template">
     <section class="scene scene-cover" aria-label="Bìa thư">
@@ -95,7 +111,7 @@
     </section>
   </template>
 
-  <script src="./config.js?v=4"></script>
-  <script src="./app.js?v=4"></script>
+  <script src="./config.js?v=5"></script>
+  <script src="./app.js?v=5"></script>
 </body>
 </html>

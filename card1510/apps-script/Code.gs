@@ -3,9 +3,27 @@ const SPREADSHEET_ID = "PASTE_SPREADSHEET_ID_HERE";
 const RESPONSE_SHEET_NAME = "Câu trả lời";
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const PASSWORD_PROPERTY_KEY = "LETTER_ACCESS_PASSWORD";
+const SUBMISSION_PROPERTY_KEY = "LETTER_SUBMITTED_RECEIPT";
+const ACCESS_TOKEN_TTL_SECONDS = 21600;
 
 function doGet(event) {
   const params = event && event.parameter ? event.parameter : {};
+  if (params.action === "auth") {
+    try {
+      return respond_(authorizeVisitor_(params.password), params.callback);
+    } catch (error) {
+      return respond_({ ok: false, error: error.message }, params.callback);
+    }
+  }
+  if (params.action === "status") {
+    try {
+      requireAccessToken_(params.token);
+      return respond_({ ok: true, submitted: isSubmitted_() }, params.callback);
+    } catch (error) {
+      return respond_({ ok: false, error: error.message }, params.callback);
+    }
+  }
   if (params.action === "receipt") {
     try {
       return respond_({ ok: hasReceipt_(params.id) }, params.callback);
@@ -34,23 +52,59 @@ function doPost(event) {
   try {
     const payload = JSON.parse(event.postData.contents);
     if (payload.action !== "saveAnswer") throw new Error("Unknown action.");
+    requireAccessToken_(payload.token);
     const answers = payload.answers || {};
     const receipt = String(payload.receipt || "");
     if (!/^[a-f0-9-]{36}$/i.test(receipt)) throw new Error("Invalid receipt.");
-    const sheet = getResponseSheet_();
-    sheet.appendRow([
-      new Date(),
-      receipt,
-      "",
-      "",
-      cleanCell_(answers.message),
-      cleanCell_(answers.threeWords),
-      cleanCell_(answers.favoritePart)
-    ]);
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try {
+      const properties = PropertiesService.getScriptProperties();
+      const submittedReceipt = properties.getProperty(SUBMISSION_PROPERTY_KEY);
+      if (submittedReceipt) {
+        if (submittedReceipt === receipt) return respond_({ ok: true, receipt: receipt });
+        return respond_({ ok: false, error: "ALREADY_SUBMITTED" });
+      }
+
+      const sheet = getResponseSheet_();
+      sheet.appendRow([
+        new Date(),
+        receipt,
+        "",
+        "",
+        cleanCell_(answers.message),
+        cleanCell_(answers.threeWords),
+        cleanCell_(answers.favoritePart)
+      ]);
+      properties.setProperty(SUBMISSION_PROPERTY_KEY, receipt);
+    } finally {
+      lock.releaseLock();
+    }
     return respond_({ ok: true, receipt: receipt });
   } catch (error) {
     return respond_({ ok: false, error: error.message });
   }
+}
+
+function authorizeVisitor_(password) {
+  const expected = PropertiesService.getScriptProperties().getProperty(PASSWORD_PROPERTY_KEY);
+  if (!expected) throw new Error("Set LETTER_ACCESS_PASSWORD in Script Properties first.");
+  if (String(password || "") !== expected) return { ok: false, error: "INVALID_PASSWORD" };
+
+  const token = Utilities.getUuid();
+  CacheService.getScriptCache().put("letter-access-" + token, "1", ACCESS_TOKEN_TTL_SECONDS);
+  return { ok: true, token: token, submitted: isSubmitted_() };
+}
+
+function requireAccessToken_(token) {
+  const value = String(token || "");
+  if (!/^[a-f0-9-]{36}$/i.test(value) || CacheService.getScriptCache().get("letter-access-" + value) !== "1") {
+    throw new Error("ACCESS_EXPIRED");
+  }
+}
+
+function isSubmitted_() {
+  return Boolean(PropertiesService.getScriptProperties().getProperty(SUBMISSION_PROPERTY_KEY));
 }
 
 function authorizeDriveAccess() {

@@ -18,6 +18,8 @@
   let turning = false;
   let submitting = false;
   let submitted = false;
+  let accessReady = false;
+  let accessToken = "";
   let photoData = null;
   let photos = [];
   let photoIndex = 0;
@@ -74,12 +76,17 @@
     }
     scene.querySelectorAll("textarea[data-answer]").forEach((field) => {
       field.value = answers[field.dataset.answer];
+      if (submitted) {
+        field.disabled = true;
+        field.placeholder = "Em đã gửi câu trả lời này rồi.";
+      }
     });
     const send = scene.querySelector("#send-reply");
     if (send) {
       if (submitted) {
         send.disabled = true;
         send.textContent = "Đã gửi rồi";
+        scene.querySelector("#send-status").textContent = "Em đã gửi lời nhắn rồi. Cảm ơn em nhé.";
       } else {
         send.addEventListener("click", () => submitAnswers(scene));
       }
@@ -92,10 +99,11 @@
   const makeScene = (sceneIndex) => setupScene(document.getElementById(templateIds[sceneIndex]).content.firstElementChild.cloneNode(true));
 
   const update = () => {
-    pageNav.hidden = index === 0;
-    musicToggle.hidden = !config.musicUrl || index === 0;
-    previous.disabled = index === 0 || turning || submitting;
-    next.disabled = index === templateIds.length - 1 || turning || submitting;
+    progress.hidden = !accessReady;
+    pageNav.hidden = !accessReady || index === 0;
+    musicToggle.hidden = !accessReady || !config.musicUrl || index === 0;
+    previous.disabled = !accessReady || index === 0 || turning || submitting;
+    next.disabled = !accessReady || index === templateIds.length - 1 || turning || submitting || (!submitted && index === templateIds.length - 2);
     counter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(templateIds.length).padStart(2, "0")}`;
     progress.style.transform = `scaleX(${index / (templateIds.length - 1)})`;
   };
@@ -103,7 +111,11 @@
   const render = (sceneIndex) => current.replaceChildren(makeScene(sceneIndex));
 
   const turnTo = (nextIndex) => {
-    if (turning || submitting || nextIndex < 0 || nextIndex >= templateIds.length || nextIndex === index) return;
+    if (!accessReady || turning || submitting || nextIndex < 0 || nextIndex >= templateIds.length || nextIndex === index) return;
+    if (nextIndex === templateIds.length - 1 && !submitted) {
+      showToast("Trang cuối sẽ mở sau khi em gửi câu trả lời nhé.");
+      return;
+    }
     collectAnswers(current);
     turning = true;
     const direction = nextIndex > index ? "forward" : "backward";
@@ -142,14 +154,21 @@
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ action: "saveAnswer", receipt, answers, submittedAt: new Date().toISOString() })
+        body: JSON.stringify({ action: "saveAnswer", token: accessToken, receipt, answers, submittedAt: new Date().toISOString() })
       });
       await confirmReceipt(receipt);
       submitting = false;
       submitted = true;
-      turnTo(index + 1);
+      turnTo(templateIds.length - 1);
     } catch (error) {
       console.error("Could not save letter response", error);
+      const state = await new Promise((resolve) => requestJsonp(`action=status&token=${encodeURIComponent(accessToken)}`, resolve));
+      if (state?.ok && state.submitted) {
+        submitting = false;
+        submitted = true;
+        turnTo(templateIds.length - 1);
+        return;
+      }
       status.textContent = /timed out|Could not confirm/i.test(error.message)
         ? "Mất kết nối rồi. Để anh kiểm tra lại sau nha."
         : "Anh chưa nhận được phản hồi. Em bấm gửi lại giúp anh nhé.";
@@ -254,6 +273,76 @@
     document.head.appendChild(script);
   };
 
+  const openLetter = (token, hasSubmitted) => {
+    accessToken = token;
+    submitted = Boolean(hasSubmitted);
+    accessReady = true;
+    index = 0;
+    render(index);
+    update();
+    fetchPhotos();
+  };
+
+  const showAccessGate = (message = "") => {
+    accessReady = false;
+    progress.hidden = true;
+    pageNav.hidden = true;
+    musicToggle.hidden = true;
+    const scene = document.querySelector("#access-template").content.firstElementChild.cloneNode(true);
+    current.replaceChildren(scene);
+    const form = scene.querySelector("#access-form");
+    const field = scene.querySelector("#access-password");
+    const status = scene.querySelector("#access-status");
+    const button = form.querySelector("button");
+    if (message) status.textContent = message;
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!config.appsScriptUrl) {
+        status.textContent = "Chưa kết nối được. Em thử lại sau nhé.";
+        status.classList.add("is-error");
+        return;
+      }
+      field.disabled = true;
+      button.disabled = true;
+      button.textContent = "Đang kiểm tra…";
+      status.textContent = "";
+      status.classList.remove("is-error");
+      requestJsonp(`action=auth&password=${encodeURIComponent(field.value)}`, (result) => {
+        if (result?.ok && result.token) {
+          try { sessionStorage.setItem("hanletter01-access-token", result.token); } catch {}
+          openLetter(result.token, result.submitted);
+          return;
+        }
+        status.textContent = result?.error === "INVALID_PASSWORD"
+          ? "Mật khẩu chưa đúng, em thử lại nhé."
+          : "Chưa kết nối được. Em thử lại sau nhé.";
+        status.classList.add("is-error");
+        field.value = "";
+        field.disabled = false;
+        button.disabled = false;
+        button.innerHTML = 'Vào thư <span aria-hidden="true">↗</span>';
+        field.focus();
+      });
+    });
+  };
+
+  const restoreAccess = () => {
+    let token = "";
+    try { token = sessionStorage.getItem("hanletter01-access-token") || ""; } catch {}
+    if (!token || !config.appsScriptUrl) {
+      showAccessGate();
+      return;
+    }
+    requestJsonp(`action=status&token=${encodeURIComponent(token)}`, (result) => {
+      if (result?.ok) {
+        openLetter(token, result.submitted);
+        return;
+      }
+      try { sessionStorage.removeItem("hanletter01-access-token"); } catch {}
+      showAccessGate("Phiên truy cập đã hết hạn. Nhập lại mật khẩu để mở thư nhé.");
+    });
+  };
+
   const fetchPhotoAt = (nextIndex) => {
     if (photoLoading) return;
     const photo = photos[nextIndex];
@@ -283,7 +372,5 @@
     });
   };
 
-  render(index);
-  update();
-  fetchPhotos();
+  restoreAccess();
 })();
