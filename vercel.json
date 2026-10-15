@@ -6,6 +6,11 @@
       "permanent": true
     },
     {
+      "source": "/haanhie/",
+      "destination": "/hanletter01/",
+      "permanent": true
+    },
+    {
       "source": "/haanhie/:path*",
       "destination": "/hanletter01/:path*",
       "permanent": true
