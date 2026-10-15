@@ -34,9 +34,11 @@ function doPost(event) {
     sheet.appendRow([
       new Date(),
       receipt,
-      cleanCell_(answers.feeling),
-      cleanCell_(answers.nextDate),
-      cleanCell_(answers.message)
+      "",
+      "",
+      cleanCell_(answers.message),
+      cleanCell_(answers.threeWords),
+      cleanCell_(answers.favoritePart)
     ]);
     return respond_({ ok: true, receipt: receipt });
   } catch (error) {
@@ -60,8 +62,13 @@ function getResponseSheet_() {
   let sheet = spreadsheet.getSheetByName(RESPONSE_SHEET_NAME);
   if (!sheet) sheet = spreadsheet.insertSheet(RESPONSE_SHEET_NAME);
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(["Thời gian", "Mã nhận", "Cảm nhận", "Buổi tiếp theo", "Lời nhắn"]);
+    sheet.appendRow(["Thời gian", "Mã nhận", "Cảm nhận cũ", "Buổi tiếp theo cũ", "Lời nhắn", "Ba từ tả buổi hôm ấy", "Điểm em thích nhất"]);
     sheet.setFrozenRows(1);
+  } else {
+    if (sheet.getMaxColumns() < 7) sheet.insertColumnsAfter(sheet.getMaxColumns(), 7 - sheet.getMaxColumns());
+    const newHeaders = sheet.getRange(1, 6, 1, 2).getValues()[0];
+    if (!newHeaders[0]) sheet.getRange(1, 6).setValue("Ba từ tả buổi hôm ấy");
+    if (!newHeaders[1]) sheet.getRange(1, 7).setValue("Điểm em thích nhất");
   }
   return sheet;
 }
@@ -71,7 +78,7 @@ function hasReceipt_(receipt) {
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(RESPONSE_SHEET_NAME);
   if (!sheet || sheet.getLastRow() < 2) return false;
   const values = sheet.getRange(2, 2, sheet.getLastRow() - 1, 1).getValues();
-  return values.some(function (row) { return row[0] === receipt; });
+  return values.some(function (row) { return String(row[0]) === String(receipt); });
 }
 
 function cleanCell_(value) {

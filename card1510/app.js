@@ -6,13 +6,14 @@
   const counter = document.querySelector("#page-counter");
   const previous = document.querySelector("#previous-page");
   const next = document.querySelector("#next-page");
+  const pageNav = document.querySelector(".page-nav");
   const toast = document.querySelector("#toast");
   const music = document.querySelector("#background-music");
   const musicToggle = document.querySelector("#music-toggle");
-  const templateIds = ["cover-template", "letter-template", "photo-template", "invitation-template", "choices-template", "reply-template", "thanks-template"];
+  const templateIds = ["cover-template", "letter-template", "photo-template", "choices-template", "reply-template", "thanks-template"];
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const turnDuration = reducedMotion ? 30 : 820;
-  const answers = { feeling: "", nextDate: "", message: "" };
+  const answers = { threeWords: "", favoritePart: "", message: "" };
   let index = 0;
   let turning = false;
   let submitting = false;
@@ -40,22 +41,22 @@
   };
 
   const collectAnswers = (scene) => {
-    scene.querySelectorAll('input[type="radio"]:checked').forEach((input) => { answers[input.name] = input.value; });
-    const message = scene.querySelector("#reply-text");
-    if (message) answers.message = message.value.trim();
+    scene.querySelectorAll("textarea[data-answer]").forEach((field) => {
+      answers[field.dataset.answer] = field.value.trim();
+    });
   };
 
   const setupScene = (scene) => {
     const note = scene.querySelector(".letter-note");
-    if (note) note.textContent = config.note || "Cảm ơn em đã dành thời gian cho anh hôm nay. Anh vui vì được gặp em.";
+    if (note) note.textContent = config.note || "Cảm ơn em vì buổi hẹn hôm nay. Anh rất vui được đi chơi với em.";
     const memory = scene.querySelector(".memory-note");
     if (memory && config.memory?.trim()) {
       memory.querySelector(".memory-copy").textContent = config.memory.trim();
       memory.hidden = false;
     }
-    scene.querySelectorAll('input[type="radio"]').forEach((input) => { input.checked = answers[input.name] === input.value; });
-    const message = scene.querySelector("#reply-text");
-    if (message) message.value = answers.message;
+    scene.querySelectorAll("textarea[data-answer]").forEach((field) => {
+      field.value = answers[field.dataset.answer];
+    });
     const send = scene.querySelector("#send-reply");
     if (send) {
       if (submitted) {
@@ -73,6 +74,8 @@
   const makeScene = (sceneIndex) => setupScene(document.getElementById(templateIds[sceneIndex]).content.firstElementChild.cloneNode(true));
 
   const update = () => {
+    pageNav.hidden = index === 0;
+    musicToggle.hidden = !config.musicUrl || index === 0;
     previous.disabled = index === 0 || turning || submitting;
     next.disabled = index === templateIds.length - 1 || turning || submitting;
     counter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(templateIds.length).padStart(2, "0")}`;
@@ -107,14 +110,14 @@
     const button = scene.querySelector("#send-reply");
     const status = scene.querySelector("#send-status");
     if (!config.appsScriptUrl) {
-      status.textContent = "Chưa kết nối nơi lưu câu trả lời. Anh sẽ kiểm tra lại nhé.";
+      status.textContent = "Mất kết nối rồi. Để anh kiểm tra lại sau nha.";
       return;
     }
     button.disabled = true;
     submitting = true;
     update();
-    button.innerHTML = '<span class="loading-dots">Đang gửi</span><span aria-hidden="true">…</span>';
-    status.textContent = "Anh đợi một chút nhé…";
+    button.textContent = "Đang gửi…";
+    status.textContent = "Chờ anh một xíu nha…";
     const receipt = crypto.randomUUID();
     try {
       await fetch(config.appsScriptUrl, {
@@ -129,7 +132,9 @@
       turnTo(index + 1);
     } catch (error) {
       console.error("Could not save letter response", error);
-      status.textContent = "Anh chưa nhận được câu trả lời. Em thử gửi lại giúp anh nhé.";
+      status.textContent = /timed out|Could not confirm/i.test(error.message)
+        ? "Mất kết nối rồi. Để anh kiểm tra lại sau nha."
+        : "Anh chưa nhận được phản hồi. Em bấm gửi lại giúp anh nhé.";
       submitting = false;
       button.disabled = false;
       button.innerHTML = 'Gửi anh nhé <span aria-hidden="true">↗</span>';
@@ -190,7 +195,7 @@
           musicToggle.setAttribute("aria-label", "Tắt nhạc");
           musicToggle.title = "Tắt nhạc";
           musicToggle.setAttribute("aria-pressed", "true");
-        } catch { showToast("Trình duyệt chưa phát được file nhạc. Kiểm tra lại đường dẫn nhé."); }
+        } catch { showToast("Trình duyệt chưa phát được file nhạc"); }
       } else {
         music.pause();
         musicToggle.classList.remove("is-playing");

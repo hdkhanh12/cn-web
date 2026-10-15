@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#e9eadc">
+  <meta name="theme-color" content="#e7edf6">
   <meta name="description" content="Một lá thư sau buổi hẹn.">
   <title>Một buổi tối, được giữ lại</title>
   <link rel="stylesheet" href="./styles.css">
@@ -16,7 +16,7 @@
     <button class="music-toggle" id="music-toggle" type="button" aria-label="Bật nhạc" title="Bật nhạc" aria-pressed="false" hidden>♫</button>
     <nav class="page-nav" aria-label="Điều hướng lá thư">
       <button class="nav-arrow" id="previous-page" type="button" aria-label="Trang trước" title="Trang trước" disabled>←</button>
-      <span class="page-counter" id="page-counter">01 / 07</span>
+      <span class="page-counter" id="page-counter">01 / 06</span>
       <button class="nav-arrow" id="next-page" type="button" aria-label="Trang tiếp" title="Trang tiếp">→</button>
     </nav>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -26,14 +26,11 @@
   <template id="cover-template">
     <section class="scene scene-cover" aria-label="Bìa thư">
       <div class="cover-lines" aria-hidden="true"></div>
-      <span class="cover-index">một lá thư / 01</span>
+      <span class="cover-index">no 01</span>
       <div class="cover-copy">
-        <p class="eyebrow">SAU BUỔI HẸN</p>
-        <h1>Một buổi tối,<br><em>được giữ lại.</em></h1>
-        <p>Anh để dành vài dòng cho em.</p>
+        <div class="envelope-art" aria-hidden="true"><span class="envelope-letter"></span><span class="envelope-flap"></span></div>
         <button class="primary-button" type="button" data-next>Mở thư <span aria-hidden="true">↗</span></button>
       </div>
-      <div class="cover-seal" aria-hidden="true">✳</div>
     </section>
   </template>
 
@@ -44,9 +41,8 @@
         <h2>Gửi em,</h2>
         <p class="letter-note"></p>
         <div class="memory-note" hidden><p class="memory-copy"></p></div>
-        <p class="signature">Anh.</p>
+        <div class="signature"><span>Thân mến,</span><span>Anh.</span></div>
       </div>
-      <span class="letter-doodle" aria-hidden="true">✳</span>
     </section>
   </template>
 
@@ -58,50 +54,34 @@
           <div class="photo-art" aria-hidden="true"><span>somewhere between<br>hello and goodnight</span></div>
           <img class="memory-photo" alt="Ảnh kỷ niệm buổi hẹn" hidden>
         </div>
-        <div class="photo-words"><span class="photo-asterisk" aria-hidden="true">✳</span><h2>Một khoảnh khắc nhỏ,<br>để dành ở đây.</h2><p class="photo-caption"></p></div>
+        <div class="photo-words"><h2>Một khoảnh khắc nhỏ.</h2><p class="photo-caption"></p></div>
       </div>
-    </section>
-  </template>
-
-  <template id="invitation-template">
-    <section class="scene scene-invitation" aria-label="Lời mời">
-      <span class="scene-number">03 / một lời mời</span>
-      <div class="invitation-body">
-        <p class="eyebrow">NẾU CÒN MỘT TRANG NỮA...</p>
-        <h2>Nếu em cũng thấy vui,<br><em>mình hẹn thêm một buổi nhé?</em></h2>
-        <p>Không cần quyết định ngay. Anh chỉ muốn em biết là anh sẵn lòng.</p>
-        <button class="primary-button" type="button" data-next>Em xem tiếp nhé <span aria-hidden="true">↗</span></button>
-      </div>
-      <span class="invitation-flower" aria-hidden="true">✳</span>
     </section>
   </template>
 
   <template id="choices-template">
     <section class="scene scene-choices" aria-label="Hai câu hỏi nhỏ">
-      <span class="scene-number">04 / vài điều nhỏ</span>
+      <span class="scene-number">04 / vài câu hỏi nhỏ</span>
       <div class="choices-body">
-        <p class="eyebrow">KHÔNG CẦN NGHĨ LÂU ĐÂU</p>
-        <h2>Cho anh hỏi hai câu nhé?</h2>
-        <fieldset class="question" data-question="feeling"><legend>Nếu chọn một từ cho buổi hôm ấy, em chọn gì?</legend>
-          <div class="option-list"><label><input type="radio" name="feeling" value="Ấm áp"><span>Ấm áp</span></label><label><input type="radio" name="feeling" value="Vui"><span>Vui</span></label><label><input type="radio" name="feeling" value="Bất ngờ"><span>Bất ngờ</span></label><label><input type="radio" name="feeling" value="Khó tả"><span>Khó tả</span></label></div>
+        <p class="eyebrow">CHỈ LÀ VÀI CÂU HỎI NHỎ</p>
+        <h2>Cho anh hỏi nhanh em hai điều nhé?</h2>
+        <fieldset class="question"><legend>Nếu phải dùng ba từ để tả buổi hôm ấy, em sẽ chọn gì?</legend>
+          <textarea id="answer-three-words" data-answer="threeWords" aria-label="Ba từ tả buổi hôm ấy" rows="2" maxlength="240"></textarea>
         </fieldset>
-        <fieldset class="question" data-question="nextDate"><legend>Nếu có buổi tiếp theo, em thích mình làm gì?</legend>
-          <div class="option-list"><label><input type="radio" name="nextDate" value="Cà phê"><span>Cà phê</span></label><label><input type="radio" name="nextDate" value="Đi dạo"><span>Đi dạo</span></label><label><input type="radio" name="nextDate" value="Xem phim"><span>Xem phim</span></label><label><input type="radio" name="nextDate" value="Để hôm đó chọn"><span>Để hôm đó chọn</span></label></div>
+        <fieldset class="question"><legend>Điểm em thích nhất ở buổi đi chơi hôm nay?</legend>
+          <textarea id="answer-favorite-part" data-answer="favoritePart" aria-label="Điểm em thích nhất ở buổi đi chơi hôm nay" rows="2" maxlength="500"></textarea>
         </fieldset>
-        <p class="optional-hint">Thích thì chọn, không thì cứ lật tiếp nhé.</p>
       </div>
     </section>
   </template>
 
   <template id="reply-template">
     <section class="scene scene-reply" aria-label="Lời nhắn của em">
-      <span class="scene-number">05 / đến lượt em</span>
+      <span class="scene-number">05 / lượt em</span>
       <div class="reply-body">
-        <p class="eyebrow">MỘT CHÚT TỪ EM</p>
-        <h2>Có điều gì em muốn kể thêm với anh không?</h2>
-        <label class="reply-label" for="reply-text">Lời nhắn của em <span>(không bắt buộc)</span></label>
-        <textarea id="reply-text" maxlength="800" rows="4" placeholder="Viết gì cũng được, hoặc để trống nhé."></textarea>
-        <p class="privacy-note">Chỉ anh xem được câu trả lời em gửi. Em có thể để trống tất cả.</p>
+        <h2>Em có muốn nhắn nhủ hay chia sẻ thêm điều gì với anh không?</h2>
+        <label class="reply-label" for="reply-text">Lời nhắn của em</label>
+        <textarea id="reply-text" data-answer="message" maxlength="800" rows="4"></textarea>
         <button id="send-reply" class="primary-button send-button" type="button">Gửi anh nhé <span aria-hidden="true">↗</span></button>
         <p id="send-status" class="send-status" role="status" aria-live="polite"></p>
       </div>
@@ -110,12 +90,12 @@
 
   <template id="thanks-template">
     <section class="scene scene-thanks" aria-label="Lời kết">
-      <span class="scene-number">06 / để dành</span>
-      <div class="thanks-body"><span class="thanks-mark" aria-hidden="true">✳</span><h2>Anh nhận được rồi.</h2><p>Cảm ơn em đã để lại vài dòng. Phần còn lại, mình cứ từ từ nhé.</p></div>
+      <span class="scene-number">06 / the end</span>
+      <div class="thanks-body"><h2>Anh nhận được rồi nhé.</h2><p>Cảm ơn em đã chia sẻ. Anh rất mong lần gặp tới đấy.</p></div>
     </section>
   </template>
 
-  <script src="./config.js"></script>
-  <script src="./app.js"></script>
+  <script src="./config.js?v=2"></script>
+  <script src="./app.js?v=2"></script>
 </body>
 </html>

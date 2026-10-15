@@ -23,7 +23,7 @@ The page works without Apps Script. It shows the designed postcard artwork until
 5. Choose **Deploy → Manage deployments → Edit** on the existing Web App. Select a new version, keep **Execute as** set to your account and access set to **Anyone**, then click **Deploy**. This updates the existing `/exec` deployment URL; the page already uses it in `config.js`.
 6. Upload a JPEG, PNG, WebP, or GIF (up to 2 MB) into the Drive folder. The page reads the latest image automatically.
 
-The site sends the two optional selections and optional note only when the visitor explicitly presses **Gửi anh nhé**. The Apps Script checks a random receipt before showing its confirmation page.
+The site sends the two optional free-text answers and optional note only when the visitor explicitly presses **Gửi anh nhé**. The Apps Script checks a random receipt before showing its confirmation page. If the `Câu trả lời` tab already contains earlier survey data, its existing columns are left intact and the new answers are added in columns F and G.
 
 ## Update the Apps Script after code changes
 
