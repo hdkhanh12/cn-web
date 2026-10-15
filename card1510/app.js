@@ -19,6 +19,9 @@
   let submitting = false;
   let submitted = false;
   let photoData = null;
+  let photos = [];
+  let photoIndex = 0;
+  let photoLoading = false;
   let toastTimer;
 
   const showToast = (message) => {
@@ -32,11 +35,26 @@
     const image = scene.querySelector(".memory-photo");
     const art = scene.querySelector(".photo-art");
     const caption = scene.querySelector(".photo-caption");
+    const photoCount = scene.querySelector(".photo-count");
+    const photoNext = scene.querySelector(".photo-next");
     if (caption) caption.textContent = config.photoCaption || "ảnh / 01";
+    if (photoCount && photos.length > 1) {
+      photoCount.textContent = `${String(photoIndex + 1).padStart(2, "0")} / ${String(photos.length).padStart(2, "0")}`;
+      photoCount.hidden = false;
+    }
+    if (photoNext) photoNext.hidden = photos.length < 2;
     if (image && photoData) {
       image.src = `data:${photoData.mimeType};base64,${photoData.base64}`;
       image.hidden = false;
       art.hidden = true;
+      if (image.dataset.nextBound !== "true") {
+        image.dataset.nextBound = "true";
+        image.addEventListener("click", advancePhoto);
+      }
+    }
+    if (photoNext && photoNext.dataset.nextBound !== "true") {
+      photoNext.dataset.nextBound = "true";
+      photoNext.addEventListener("click", advancePhoto);
     }
   };
 
@@ -137,7 +155,7 @@
         : "Anh chưa nhận được phản hồi. Em bấm gửi lại giúp anh nhé.";
       submitting = false;
       button.disabled = false;
-      button.innerHTML = 'Gửi anh nhé <span aria-hidden="true">↗</span>';
+      button.innerHTML = 'Gửi anh <span aria-hidden="true">↗</span>';
       update();
     }
   };
@@ -206,34 +224,66 @@
     });
   }
 
-  const showPhoto = (data) => {
+  const showPhoto = (data, nextIndex) => {
     if (!data || !/^image\/(jpeg|png|webp|gif)$/.test(data.mimeType) || !data.base64) return;
     photoData = data;
-    document.querySelectorAll(".memory-photo").forEach((image) => {
-      image.src = `data:${data.mimeType};base64,${data.base64}`;
-      image.hidden = false;
-      image.closest(".scene").querySelector(".photo-art").hidden = true;
+    photoIndex = nextIndex;
+    const scene = current.querySelector(".scene-photo");
+    if (scene) setPhoto(scene);
+  };
+
+  const requestJsonp = (query, onResult) => {
+    if (!config.appsScriptUrl) return;
+    const callback = `afterglowData_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const script = document.createElement("script");
+    const timeout = setTimeout(() => { delete window[callback]; script.remove(); onResult(null); }, 12000);
+    window[callback] = (result) => {
+      clearTimeout(timeout);
+      delete window[callback];
+      script.remove();
+      onResult(result);
+    };
+    script.onerror = () => {
+      clearTimeout(timeout);
+      delete window[callback];
+      script.remove();
+      onResult(null);
+    };
+    const separator = config.appsScriptUrl.includes("?") ? "&" : "?";
+    script.src = `${config.appsScriptUrl}${separator}${query}&callback=${callback}&t=${Date.now()}`;
+    document.head.appendChild(script);
+  };
+
+  const fetchPhotoAt = (nextIndex) => {
+    if (photoLoading) return;
+    const photo = photos[nextIndex];
+    if (!photo) return;
+    photoLoading = true;
+    const button = current.querySelector(".photo-next");
+    if (button) button.disabled = true;
+    requestJsonp(`action=photo&id=${encodeURIComponent(photo.id)}`, (result) => {
+      photoLoading = false;
+      const activeButton = current.querySelector(".photo-next");
+      if (activeButton) activeButton.disabled = false;
+      if (result?.ok && result.photo) showPhoto(result.photo, nextIndex);
+      else showToast("Ảnh này chưa mở được. Em thử lại sau nhé.");
     });
   };
 
-  const fetchPhoto = () => {
-    if (!config.appsScriptUrl) return;
-    const callback = `afterglowPhoto_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const script = document.createElement("script");
-    const timeout = setTimeout(() => { delete window[callback]; script.remove(); }, 8000);
-    window[callback] = (result) => {
-      clearTimeout(timeout);
-      if (result?.ok && result.photo) showPhoto(result.photo);
-      delete window[callback];
-      script.remove();
-    };
-    script.onerror = () => { clearTimeout(timeout); delete window[callback]; script.remove(); };
-    const separator = config.appsScriptUrl.includes("?") ? "&" : "?";
-    script.src = `${config.appsScriptUrl}${separator}action=photo&callback=${callback}&t=${Date.now()}`;
-    document.head.appendChild(script);
+  const advancePhoto = () => {
+    if (photos.length < 2) return;
+    fetchPhotoAt((photoIndex + 1) % photos.length);
+  };
+
+  const fetchPhotos = () => {
+    requestJsonp("action=photos", (result) => {
+      if (!result?.ok || !Array.isArray(result.photos)) return;
+      photos = result.photos;
+      if (photos.length) fetchPhotoAt(0);
+    });
   };
 
   render(index);
   update();
-  fetchPhoto();
+  fetchPhotos();
 })();

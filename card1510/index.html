@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#e7edf6">
   <meta name="description" content="Một lá thư sau buổi hẹn.">
   <title>Một buổi tối, được giữ lại</title>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=4">
 </head>
 <body>
   <main class="experience" id="experience" aria-label="Lá thư gửi em">
@@ -38,10 +38,10 @@
     <section class="scene scene-letter" aria-label="Lời nhắn">
       <span class="scene-number">01 / lời nhắn</span>
       <div class="letter-body">
-        <h2>Gửi em,</h2>
+        <h2>Gửi Hà Anh,</h2>
         <p class="letter-note"></p>
         <div class="memory-note" hidden><p class="memory-copy"></p></div>
-        <div class="signature"><span>Thân mến,</span><span>Anh.</span></div>
+        <div class="signature"><span>Thân mến,</span><span>hdk</span></div>
       </div>
     </section>
   </template>
@@ -53,23 +53,23 @@
         <div class="photo-frame">
           <div class="photo-art" aria-hidden="true"><span>somewhere between<br>hello and goodnight</span></div>
           <img class="memory-photo" alt="Ảnh kỷ niệm buổi hẹn" hidden>
+          <button class="photo-next" id="photo-next" type="button" aria-label="Mở ảnh tiếp theo" title="Mở ảnh tiếp theo" hidden><span aria-hidden="true">→</span></button>
         </div>
-        <div class="photo-words"><h2>Một khoảnh khắc nhỏ.</h2><p class="photo-caption"></p></div>
+        <div class="photo-words"><h2>Us.</h2><p class="photo-caption"></p><p class="photo-count" id="photo-count" hidden></p></div>
       </div>
     </section>
   </template>
 
   <template id="choices-template">
     <section class="scene scene-choices" aria-label="Hai câu hỏi nhỏ">
-      <span class="scene-number">04 / vài câu hỏi nhỏ</span>
+      <span class="scene-number">03 / vài câu hỏi nhỏ</span>
       <div class="choices-body">
-        <p class="eyebrow">CHỈ LÀ VÀI CÂU HỎI NHỎ</p>
         <h2>Cho anh hỏi nhanh em hai điều nhé?</h2>
-        <fieldset class="question"><legend>Nếu phải dùng ba từ để tả buổi hôm ấy, em sẽ chọn gì?</legend>
-          <textarea id="answer-three-words" data-answer="threeWords" aria-label="Ba từ tả buổi hôm ấy" rows="2" maxlength="240"></textarea>
+        <fieldset class="question"><legend>Nếu phải dùng ba từ để tả buổi hôm nay, em sẽ chọn gì?</legend>
+          <textarea id="answer-three-words" data-answer="threeWords" aria-label="Ba từ tả buổi hôm nay" rows="2" maxlength="240"></textarea>
         </fieldset>
-        <fieldset class="question"><legend>Điểm em thích nhất ở buổi đi chơi hôm nay?</legend>
-          <textarea id="answer-favorite-part" data-answer="favoritePart" aria-label="Điểm em thích nhất ở buổi đi chơi hôm nay" rows="2" maxlength="500"></textarea>
+        <fieldset class="question"><legend>Điều em thích nhất ở buổi hẹn này?</legend>
+          <textarea id="answer-favorite-part" data-answer="favoritePart" aria-label="Điều em thích nhất ở buổi hẹn này" rows="2" maxlength="500"></textarea>
         </fieldset>
       </div>
     </section>
@@ -77,12 +77,12 @@
 
   <template id="reply-template">
     <section class="scene scene-reply" aria-label="Lời nhắn của em">
-      <span class="scene-number">05 / lượt em</span>
+      <span class="scene-number">04 / này em</span>
       <div class="reply-body">
         <h2>Em có muốn nhắn nhủ hay chia sẻ thêm điều gì với anh không?</h2>
         <label class="reply-label" for="reply-text">Lời nhắn của em</label>
         <textarea id="reply-text" data-answer="message" maxlength="800" rows="4"></textarea>
-        <button id="send-reply" class="primary-button send-button" type="button">Gửi anh nhé <span aria-hidden="true">↗</span></button>
+        <button id="send-reply" class="primary-button send-button" type="button">Gửi anh</button>
         <p id="send-status" class="send-status" role="status" aria-live="polite"></p>
       </div>
     </section>
@@ -90,12 +90,12 @@
 
   <template id="thanks-template">
     <section class="scene scene-thanks" aria-label="Lời kết">
-      <span class="scene-number">06 / the end</span>
-      <div class="thanks-body"><h2>Anh nhận được rồi nhé.</h2><p>Cảm ơn em đã chia sẻ. Anh rất mong lần gặp tới đấy.</p></div>
+      <span class="scene-number">05 / the end</span>
+      <div class="thanks-body"><h2>Anh nhận được rùi</h2><p>Cảm ơn em đã chia sẻ, anh rất mong lần gặp tới đấy.</p></div>
     </section>
   </template>
 
-  <script src="./config.js?v=2"></script>
-  <script src="./app.js?v=2"></script>
+  <script src="./config.js?v=4"></script>
+  <script src="./app.js?v=4"></script>
 </body>
 </html>

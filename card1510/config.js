@@ -5,7 +5,7 @@ window.LETTER_CONFIG = {
   contactUrl: "",
   // Optional: add an MP3/OGG file to this folder and use a relative URL, e.g. "./music.mp3".
   musicUrl: "./musicad.mp3",
-  note: "Cảm ơn em vì buổi hẹn hôm nay. Anh rất vui được đi chơi với em.",
+  note: "Cảm ơn em vì buổi hẹn hôm nay, anh rất vui được cùng em đi chơi.",
   memory: "",
   photoCaption: "ảnh / 01"
 };
