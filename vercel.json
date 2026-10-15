@@ -1,21 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/haanhie",
-      "destination": "/hanletter01/",
-      "permanent": true
-    },
-    {
-      "source": "/haanhie/",
-      "destination": "/hanletter01/",
-      "permanent": true
-    },
-    {
-      "source": "/haanhie/:path*",
-      "destination": "/hanletter01/:path*",
-      "permanent": true
-    },
-    {
       "source": "/hanletter01",
       "destination": "/hanletter01/",
       "permanent": true
@@ -38,14 +23,6 @@
     },
     {
       "source": "/hanletter01/:path*",
-      "destination": "/card1510/:path*"
-    },
-    {
-      "source": "/haanhie/",
-      "destination": "/card1510/"
-    },
-    {
-      "source": "/haanhie/:path*",
       "destination": "/card1510/:path*"
     }
   ]

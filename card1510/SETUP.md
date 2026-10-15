@@ -55,4 +55,4 @@ If you deploy the microsite under a subpath, keep the audio file beside `index.h
 
 ## Deployment path
 
-The Vercel rewrite serves this folder at `/hanletter01` while keeping the source organized in `card1510`. The old `/haanhie` route redirects to the new path. The MP3 and page assets are served from either route automatically.
+The Vercel rewrite serves this folder at `/hanletter01` while keeping the source organized in `card1510`. The former `/haanhie` route is no longer configured. The MP3 and page assets are served from `/hanletter01` automatically.
