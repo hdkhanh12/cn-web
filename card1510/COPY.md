@@ -2,8 +2,7 @@
 
 ## Màn mở thư
 
-- no 01
-- Lá thư dành riêng cho em
+- Letter 01
 - Nhập mật khẩu để mở nhé.
 - Mật khẩu
 - Vào thư
@@ -30,7 +29,7 @@
 
 - 02 / khoảnh khắc
 - somewhere between hello and goodnight (ảnh minh họa khi chưa có ảnh Drive)
-- Us.
+- Us
 - ảnh / 01 (`photoCaption` trong `config.js`)
 - Chỉ hiện khi có nhiều ảnh: chỉ báo vị trí, ví dụ `01 / 03`
 - Nút ảnh tiếp theo, chỉ hiện khi có nhiều ảnh (nhãn trợ năng: Mở ảnh tiếp theo)
@@ -39,7 +38,7 @@
 ## Trang 3 — Vài câu hỏi nhỏ
 
 - 03 / vài câu hỏi nhỏ
-- Cho anh hỏi nhanh em hai điều nhé?
+- Cho anh hỏi em là...
 - Nếu phải dùng ba từ để tả buổi hôm nay, em sẽ chọn gì?
 - Trường trả lời tự do: ba từ tả buổi hôm nay
 - Điều em thích nhất ở buổi hẹn này?
