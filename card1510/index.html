@@ -3,143 +3,116 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#efece1">
-  <meta name="description" content="Một lá thư nhỏ sau buổi hẹn.">
+  <meta name="theme-color" content="#e9eadc">
+  <meta name="description" content="Một lá thư sau buổi hẹn.">
   <title>Một buổi tối, được giữ lại</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <div class="paper-grain" aria-hidden="true"></div>
-  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
-
-  <main class="experience" id="experience" data-index="0">
-    <header class="masthead">
-      <a class="wordmark" href="./" aria-label="Afterglow">afterglow<span>®</span></a>
-      <p class="masthead-note">a letter after the date</p>
-      <div class="masthead-tools">
-        <span class="masthead-number">FIELD NOTE <b>01</b></span>
-        <button id="music-toggle" class="music-toggle" type="button" aria-label="Bật nhạc nền" title="Bật nhạc nền" aria-pressed="false" hidden>
-          <span class="music-disc" aria-hidden="true">♫</span>
-        </button>
-      </div>
-    </header>
-
-    <section class="book-area" aria-label="Lá thư Afterglow">
-      <div class="book-wrap">
-        <div class="book-shell" id="book" data-direction="forward">
-          <div class="book-pages" aria-live="polite" aria-atomic="true">
-            <article class="page-current" id="page-current"></article>
-            <div class="page-turn" id="page-turn" aria-hidden="true" hidden>
-              <div class="page-face page-face--front" id="page-turn-front"></div>
-              <div class="page-face page-face--back" id="page-turn-back"></div>
-            </div>
-          </div>
-          <span class="book-spine" aria-hidden="true"></span>
-          <span class="book-edge" aria-hidden="true"></span>
-        </div>
-
-        <nav class="page-nav" id="page-nav" aria-label="Điều hướng trang" hidden>
-          <button class="page-nav-button" id="previous-page" type="button" aria-label="Trang trước" title="Trang trước" disabled>
-            <span aria-hidden="true">←</span>
-          </button>
-          <span class="page-counter" id="page-counter" aria-live="polite">BÌA</span>
-          <button class="page-nav-button" id="next-page" type="button" aria-label="Trang tiếp theo" title="Trang tiếp theo">
-            <span aria-hidden="true">→</span>
-          </button>
-        </nav>
-      </div>
-    </section>
-
-    <footer class="colophon">
-      <span>kept with care</span>
-      <span class="colophon-mark" aria-hidden="true">✳</span>
-      <span>no rush, just a note</span>
-    </footer>
+  <main class="experience" id="experience" aria-label="Lá thư gửi em">
+    <div class="scene-current" id="scene-current" aria-live="polite"></div>
+    <div class="scene-turn" id="scene-turn" aria-hidden="true" hidden></div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <button class="music-toggle" id="music-toggle" type="button" aria-label="Bật nhạc" title="Bật nhạc" aria-pressed="false" hidden>♫</button>
+    <nav class="page-nav" aria-label="Điều hướng lá thư">
+      <button class="nav-arrow" id="previous-page" type="button" aria-label="Trang trước" title="Trang trước" disabled>←</button>
+      <span class="page-counter" id="page-counter">01 / 07</span>
+      <button class="nav-arrow" id="next-page" type="button" aria-label="Trang tiếp" title="Trang tiếp">→</button>
+    </nav>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </main>
-
   <audio id="background-music" preload="none" loop></audio>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <template id="cover-template">
-    <div class="page page-cover">
-      <div class="cover-ink" aria-hidden="true">
-        <span class="cover-rule cover-rule--one"></span>
-        <span class="cover-rule cover-rule--two"></span>
-        <span class="cover-mark">01</span>
-      </div>
-      <p class="cover-kicker">AFTERGLOW <span>/</span> FIELD NOTE</p>
-      <div class="cover-title-group">
-        <p class="cover-overline">SAU BUỔI HẸN</p>
+    <section class="scene scene-cover" aria-label="Bìa thư">
+      <div class="cover-lines" aria-hidden="true"></div>
+      <span class="cover-index">một lá thư / 01</span>
+      <div class="cover-copy">
+        <p class="eyebrow">SAU BUỔI HẸN</p>
         <h1>Một buổi tối,<br><em>được giữ lại.</em></h1>
-        <p class="cover-subtitle">Anh để dành vài dòng cho em.</p>
+        <p>Anh để dành vài dòng cho em.</p>
+        <button class="primary-button" type="button" data-next>Mở thư <span aria-hidden="true">↗</span></button>
       </div>
-      <button class="open-book-button" type="button" data-turn-next>
-        <span>Mở thư</span><span class="open-arrow" aria-hidden="true">↗</span>
-      </button>
-      <span class="cover-imprint">A SMALL NOTE<br>MADE AFTER A GOOD EVENING</span>
-    </div>
+      <div class="cover-seal" aria-hidden="true">✳</div>
+    </section>
   </template>
 
   <template id="letter-template">
-    <div class="page page-letter">
-      <header class="page-header">
-        <span>01 <i>/</i> LỜI NHẮN</span>
-        <span class="page-header-mark" aria-hidden="true">✳</span>
-      </header>
-      <div class="letter-copy">
+    <section class="scene scene-letter" aria-label="Lời nhắn">
+      <span class="scene-number">01 / lời nhắn</span>
+      <div class="letter-body">
         <h2>Gửi em,</h2>
         <p class="letter-note"></p>
-        <div class="memory-note" hidden>
-          <span class="memory-rule" aria-hidden="true"></span>
-          <h3>Điều anh muốn nhớ</h3>
-          <p class="memory-copy"></p>
-        </div>
+        <div class="memory-note" hidden><p class="memory-copy"></p></div>
+        <p class="signature">Anh.</p>
       </div>
-      <div class="signature"><span>—</span> Anh</div>
-      <footer class="page-footer"><span>AFTERGLOW</span><span>01</span></footer>
-    </div>
+      <span class="letter-doodle" aria-hidden="true">✳</span>
+    </section>
   </template>
 
   <template id="photo-template">
-    <div class="page page-photo">
-      <header class="page-header">
-        <span>02 <i>/</i> ẢNH KỶ NIỆM</span>
-        <span class="photo-stamp">KEPT<br>WITH CARE</span>
-      </header>
-      <figure class="photo-mat">
-        <div class="photo-art" aria-hidden="true">
-          <span class="photo-art-index">EVENING EDITION</span>
-          <span class="photo-art-line photo-art-line--one"></span>
-          <span class="photo-art-line photo-art-line--two"></span>
-          <span class="photo-art-copy">somewhere<br>between hello<br>and goodnight</span>
-          <span class="photo-art-stamp">A GOOD<br>EVENING</span>
+    <section class="scene scene-photo" aria-label="Ảnh kỷ niệm">
+      <span class="scene-number">02 / khoảnh khắc</span>
+      <div class="photo-layout">
+        <div class="photo-frame">
+          <div class="photo-art" aria-hidden="true"><span>somewhere between<br>hello and goodnight</span></div>
+          <img class="memory-photo" alt="Ảnh kỷ niệm buổi hẹn" hidden>
         </div>
-        <img class="memory-photo" alt="Ảnh kỷ niệm buổi hẹn" hidden>
-        <figcaption><span class="photo-caption">ảnh / 01</span><span>kept with care</span></figcaption>
-      </figure>
-      <p class="photo-note">Một khoảnh khắc nhỏ, để dành ở đây.</p>
-      <footer class="page-footer"><span>AFTERGLOW</span><span>02</span></footer>
-    </div>
+        <div class="photo-words"><span class="photo-asterisk" aria-hidden="true">✳</span><h2>Một khoảnh khắc nhỏ,<br>để dành ở đây.</h2><p class="photo-caption"></p></div>
+      </div>
+    </section>
   </template>
 
   <template id="invitation-template">
-    <div class="page page-invitation">
-      <header class="page-header">
-        <span>03 <i>/</i> LỜI MỜI</span>
-        <span class="invitation-spark" aria-hidden="true">✳</span>
-      </header>
-      <div class="invitation-copy">
-        <p class="invitation-overline">NEXT PAGE?</p>
+    <section class="scene scene-invitation" aria-label="Lời mời">
+      <span class="scene-number">03 / một lời mời</span>
+      <div class="invitation-body">
+        <p class="eyebrow">NẾU CÒN MỘT TRANG NỮA...</p>
         <h2>Nếu em cũng thấy vui,<br><em>mình hẹn thêm một buổi nhé?</em></h2>
-        <p class="invitation-text">Không cần quyết định ngay. Anh chỉ muốn em biết là anh sẵn lòng.</p>
-        <a class="reply-button" href="#reply">
-          <span>Nhắn anh một câu</span><span aria-hidden="true">↗</span>
-        </a>
-        <p class="reply-hint">Cứ thong thả nhé.</p>
+        <p>Không cần quyết định ngay. Anh chỉ muốn em biết là anh sẵn lòng.</p>
+        <button class="primary-button" type="button" data-next>Em xem tiếp nhé <span aria-hidden="true">↗</span></button>
       </div>
-      <div class="invitation-imprint" aria-hidden="true">✳</div>
-      <footer class="page-footer"><span>AFTERGLOW</span><span>03</span></footer>
-    </div>
+      <span class="invitation-flower" aria-hidden="true">✳</span>
+    </section>
+  </template>
+
+  <template id="choices-template">
+    <section class="scene scene-choices" aria-label="Hai câu hỏi nhỏ">
+      <span class="scene-number">04 / vài điều nhỏ</span>
+      <div class="choices-body">
+        <p class="eyebrow">KHÔNG CẦN NGHĨ LÂU ĐÂU</p>
+        <h2>Cho anh hỏi hai câu nhé?</h2>
+        <fieldset class="question" data-question="feeling"><legend>Nếu chọn một từ cho buổi hôm ấy, em chọn gì?</legend>
+          <div class="option-list"><label><input type="radio" name="feeling" value="Ấm áp"><span>Ấm áp</span></label><label><input type="radio" name="feeling" value="Vui"><span>Vui</span></label><label><input type="radio" name="feeling" value="Bất ngờ"><span>Bất ngờ</span></label><label><input type="radio" name="feeling" value="Khó tả"><span>Khó tả</span></label></div>
+        </fieldset>
+        <fieldset class="question" data-question="nextDate"><legend>Nếu có buổi tiếp theo, em thích mình làm gì?</legend>
+          <div class="option-list"><label><input type="radio" name="nextDate" value="Cà phê"><span>Cà phê</span></label><label><input type="radio" name="nextDate" value="Đi dạo"><span>Đi dạo</span></label><label><input type="radio" name="nextDate" value="Xem phim"><span>Xem phim</span></label><label><input type="radio" name="nextDate" value="Để hôm đó chọn"><span>Để hôm đó chọn</span></label></div>
+        </fieldset>
+        <p class="optional-hint">Thích thì chọn, không thì cứ lật tiếp nhé.</p>
+      </div>
+    </section>
+  </template>
+
+  <template id="reply-template">
+    <section class="scene scene-reply" aria-label="Lời nhắn của em">
+      <span class="scene-number">05 / đến lượt em</span>
+      <div class="reply-body">
+        <p class="eyebrow">MỘT CHÚT TỪ EM</p>
+        <h2>Có điều gì em muốn kể thêm với anh không?</h2>
+        <label class="reply-label" for="reply-text">Lời nhắn của em <span>(không bắt buộc)</span></label>
+        <textarea id="reply-text" maxlength="800" rows="4" placeholder="Viết gì cũng được, hoặc để trống nhé."></textarea>
+        <p class="privacy-note">Chỉ anh xem được câu trả lời em gửi. Em có thể để trống tất cả.</p>
+        <button id="send-reply" class="primary-button send-button" type="button">Gửi anh nhé <span aria-hidden="true">↗</span></button>
+        <p id="send-status" class="send-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </template>
+
+  <template id="thanks-template">
+    <section class="scene scene-thanks" aria-label="Lời kết">
+      <span class="scene-number">06 / để dành</span>
+      <div class="thanks-body"><span class="thanks-mark" aria-hidden="true">✳</span><h2>Anh nhận được rồi.</h2><p>Cảm ơn em đã để lại vài dòng. Phần còn lại, mình cứ từ từ nhé.</p></div>
+    </section>
   </template>
 
   <script src="./config.js"></script>

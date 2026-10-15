@@ -1,192 +1,183 @@
 (() => {
   const config = window.LETTER_CONFIG || {};
-  const book = document.querySelector("#book");
-  const pageCurrent = document.querySelector("#page-current");
-  const pageTurn = document.querySelector("#page-turn");
-  const turnFront = document.querySelector("#page-turn-front");
-  const turnBack = document.querySelector("#page-turn-back");
-  const pageNav = document.querySelector("#page-nav");
-  const pageCounter = document.querySelector("#page-counter");
-  const previousButton = document.querySelector("#previous-page");
-  const nextButton = document.querySelector("#next-page");
-  const readingProgress = document.querySelector("#reading-progress");
+  const current = document.querySelector("#scene-current");
+  const turn = document.querySelector("#scene-turn");
+  const progress = document.querySelector("#progress");
+  const counter = document.querySelector("#page-counter");
+  const previous = document.querySelector("#previous-page");
+  const next = document.querySelector("#next-page");
   const toast = document.querySelector("#toast");
-  const musicToggle = document.querySelector("#music-toggle");
   const music = document.querySelector("#background-music");
-  const pageTemplates = ["cover-template", "letter-template", "photo-template", "invitation-template"];
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const turnDuration = reducedMotion ? 40 : 900;
-  let currentIndex = 0;
-  let isTurning = false;
+  const musicToggle = document.querySelector("#music-toggle");
+  const templateIds = ["cover-template", "letter-template", "photo-template", "invitation-template", "choices-template", "reply-template", "thanks-template"];
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const turnDuration = reducedMotion ? 30 : 820;
+  const answers = { feeling: "", nextDate: "", message: "" };
+  let index = 0;
+  let turning = false;
+  let submitting = false;
+  let submitted = false;
   let photoData = null;
-  let toastTimer = 0;
-  let touchStartX = null;
+  let toastTimer;
 
   const showToast = (message) => {
     toast.textContent = message;
     toast.classList.add("is-visible");
-    window.clearTimeout(toastTimer);
-    toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2800);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 3000);
   };
 
-  const applyPhoto = (page) => {
-    const image = page.querySelector(".memory-photo");
-    const artwork = page.querySelector(".photo-art");
-    const caption = page.querySelector(".photo-caption");
+  const setPhoto = (scene) => {
+    const image = scene.querySelector(".memory-photo");
+    const art = scene.querySelector(".photo-art");
+    const caption = scene.querySelector(".photo-caption");
     if (caption) caption.textContent = config.photoCaption || "ảnh / 01";
-    if (!image || !photoData) return;
-    image.src = `data:${photoData.mimeType};base64,${photoData.base64}`;
-    image.hidden = false;
-    artwork.hidden = true;
+    if (image && photoData) {
+      image.src = `data:${photoData.mimeType};base64,${photoData.base64}`;
+      image.hidden = false;
+      art.hidden = true;
+    }
   };
 
-  const configurePage = (page) => {
-    const note = page.querySelector(".letter-note");
-    if (note) note.textContent = config.note || "Cảm ơn em đã dành thời gian cho anh hôm nay. Anh vui vì được gặp em.";
+  const collectAnswers = (scene) => {
+    scene.querySelectorAll('input[type="radio"]:checked').forEach((input) => { answers[input.name] = input.value; });
+    const message = scene.querySelector("#reply-text");
+    if (message) answers.message = message.value.trim();
+  };
 
-    const memory = page.querySelector(".memory-note");
+  const setupScene = (scene) => {
+    const note = scene.querySelector(".letter-note");
+    if (note) note.textContent = config.note || "Cảm ơn em đã dành thời gian cho anh hôm nay. Anh vui vì được gặp em.";
+    const memory = scene.querySelector(".memory-note");
     if (memory && config.memory?.trim()) {
       memory.querySelector(".memory-copy").textContent = config.memory.trim();
       memory.hidden = false;
     }
-
-    const link = page.querySelector(".reply-button");
-    if (link && config.contactUrl) {
-      link.href = config.contactUrl;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-    } else if (link) {
-      link.addEventListener("click", async (event) => {
-        event.preventDefault();
-        const message = "Cảm ơn anh vì buổi hẹn hôm nay nhé.";
-        try {
-          await navigator.clipboard.writeText(message);
-          showToast("Đã chép một lời nhắn gợi ý. Gửi khi em thấy tiện nhé.");
-        } catch {
-          showToast(message);
-        }
-      });
+    scene.querySelectorAll('input[type="radio"]').forEach((input) => { input.checked = answers[input.name] === input.value; });
+    const message = scene.querySelector("#reply-text");
+    if (message) message.value = answers.message;
+    const send = scene.querySelector("#send-reply");
+    if (send) {
+      if (submitted) {
+        send.disabled = true;
+        send.textContent = "Đã gửi rồi";
+      } else {
+        send.addEventListener("click", () => submitAnswers(scene));
+      }
     }
-
-    applyPhoto(page);
-    return page;
+    scene.querySelectorAll("[data-next]").forEach((button) => button.addEventListener("click", () => turnTo(index + 1)));
+    setPhoto(scene);
+    return scene;
   };
 
-  const createPage = (index) => {
-    const template = document.getElementById(pageTemplates[index]);
-    return configurePage(template.content.firstElementChild.cloneNode(true));
+  const makeScene = (sceneIndex) => setupScene(document.getElementById(templateIds[sceneIndex]).content.firstElementChild.cloneNode(true));
+
+  const update = () => {
+    previous.disabled = index === 0 || turning || submitting;
+    next.disabled = index === templateIds.length - 1 || turning || submitting;
+    counter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(templateIds.length).padStart(2, "0")}`;
+    progress.style.transform = `scaleX(${index / (templateIds.length - 1)})`;
   };
 
-  const pageLabel = (index) => index === 0 ? "BÌA" : `TRANG 0${index} / 03`;
-
-  const updateNavigation = () => {
-    book.dataset.index = String(currentIndex);
-    pageCounter.textContent = pageLabel(currentIndex);
-    previousButton.disabled = currentIndex === 0 || isTurning;
-    nextButton.disabled = currentIndex === pageTemplates.length - 1 || isTurning;
-    pageNav.hidden = currentIndex === 0;
-    const progress = currentIndex / (pageTemplates.length - 1);
-    readingProgress.style.transform = `scaleX(${progress})`;
-  };
-
-  const renderCurrentPage = (index) => {
-    pageCurrent.replaceChildren(createPage(index));
-  };
+  const render = (sceneIndex) => current.replaceChildren(makeScene(sceneIndex));
 
   const turnTo = (nextIndex) => {
-    if (isTurning || nextIndex < 0 || nextIndex >= pageTemplates.length || nextIndex === currentIndex) return;
-    isTurning = true;
-    const direction = nextIndex > currentIndex ? "forward" : "backward";
-    const oldPage = pageCurrent.firstElementChild.cloneNode(true);
-    const newPage = createPage(nextIndex);
-
-    turnFront.replaceChildren(oldPage);
-    turnBack.replaceChildren(newPage.cloneNode(true));
-    pageTurn.hidden = false;
-    pageTurn.setAttribute("aria-hidden", "true");
-    renderCurrentPage(nextIndex);
-    book.dataset.direction = direction;
-    book.classList.remove("is-turning-forward", "is-turning-backward");
-    void pageTurn.offsetWidth;
-    window.requestAnimationFrame(() => book.classList.add(`is-turning-${direction}`));
-
-    window.setTimeout(() => {
-      currentIndex = nextIndex;
-      book.classList.remove("is-turning-forward", "is-turning-backward");
-      pageTurn.hidden = true;
-      pageTurn.setAttribute("aria-hidden", "true");
-      isTurning = false;
-      updateNavigation();
-    }, turnDuration + 40);
+    if (turning || submitting || nextIndex < 0 || nextIndex >= templateIds.length || nextIndex === index) return;
+    collectAnswers(current);
+    turning = true;
+    const direction = nextIndex > index ? "forward" : "backward";
+    turn.replaceChildren(current.firstElementChild.cloneNode(true));
+    turn.hidden = false;
+    turn.className = "scene-turn";
+    render(nextIndex);
+    void turn.offsetWidth;
+    turn.classList.add(`is-${direction}`);
+    update();
+    setTimeout(() => {
+      index = nextIndex;
+      turn.hidden = true;
+      turn.className = "scene-turn";
+      turning = false;
+      update();
+    }, turnDuration + 30);
   };
 
-  previousButton.addEventListener("click", () => turnTo(currentIndex - 1));
-  nextButton.addEventListener("click", () => turnTo(currentIndex + 1));
-  pageCurrent.addEventListener("click", (event) => {
-    if (event.target.closest("button, a")) {
-      if (event.target.closest("[data-turn-next]")) turnTo(currentIndex + 1);
+  const submitAnswers = async (scene) => {
+    collectAnswers(scene);
+    const button = scene.querySelector("#send-reply");
+    const status = scene.querySelector("#send-status");
+    if (!config.appsScriptUrl) {
+      status.textContent = "Chưa kết nối nơi lưu câu trả lời. Anh sẽ kiểm tra lại nhé.";
       return;
     }
-    const bounds = book.getBoundingClientRect();
-    turnTo(currentIndex + (event.clientX < bounds.left + bounds.width / 2 ? -1 : 1));
-  });
-
-  window.addEventListener("keydown", (event) => {
-    if (event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
-    if (event.key === "ArrowRight" && currentIndex < pageTemplates.length - 1) {
-      event.preventDefault();
-      turnTo(currentIndex + 1);
-    } else if (event.key === "ArrowLeft" && currentIndex > 0) {
-      event.preventDefault();
-      turnTo(currentIndex - 1);
+    button.disabled = true;
+    submitting = true;
+    update();
+    button.innerHTML = '<span class="loading-dots">Đang gửi</span><span aria-hidden="true">…</span>';
+    status.textContent = "Anh đợi một chút nhé…";
+    const receipt = crypto.randomUUID();
+    try {
+      await fetch(config.appsScriptUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "saveAnswer", receipt, answers, submittedAt: new Date().toISOString() })
+      });
+      await confirmReceipt(receipt);
+      submitting = false;
+      submitted = true;
+      turnTo(index + 1);
+    } catch (error) {
+      console.error("Could not save letter response", error);
+      status.textContent = "Anh chưa nhận được câu trả lời. Em thử gửi lại giúp anh nhé.";
+      submitting = false;
+      button.disabled = false;
+      button.innerHTML = 'Gửi anh nhé <span aria-hidden="true">↗</span>';
+      update();
     }
+  };
+
+  const confirmReceipt = (receipt) => new Promise((resolve, reject) => {
+    const callback = `afterglowReceipt_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const script = document.createElement("script");
+    let attempts = 0;
+    let settled = false;
+    const finish = (error) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      delete window[callback];
+      script.remove();
+      error ? reject(error) : resolve();
+    };
+    const check = () => {
+      attempts += 1;
+      window[callback] = (result) => {
+        if (result?.ok) return finish();
+        if (attempts >= 8) return finish(new Error("Receipt was not saved."));
+        script.remove();
+        setTimeout(load, 1100);
+      };
+      const separator = config.appsScriptUrl.includes("?") ? "&" : "?";
+      script.src = `${config.appsScriptUrl}${separator}action=receipt&id=${encodeURIComponent(receipt)}&callback=${callback}&t=${Date.now()}`;
+      script.onerror = () => {
+        if (attempts >= 8) finish(new Error("Could not confirm the save."));
+        else setTimeout(load, 1100);
+      };
+      document.head.appendChild(script);
+    };
+    const load = () => { if (!settled) check(); };
+    const timeout = setTimeout(() => finish(new Error("Save confirmation timed out.")), 11000);
+    load();
   });
 
-  book.addEventListener("touchstart", (event) => {
-    touchStartX = event.changedTouches[0].clientX;
-  }, { passive: true });
-  book.addEventListener("touchend", (event) => {
-    if (touchStartX === null) return;
-    const distance = event.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(distance) > 55) turnTo(currentIndex + (distance < 0 ? 1 : -1));
-    touchStartX = null;
-  }, { passive: true });
-
-  const showPhoto = (data) => {
-    if (!data || !/^image\/(jpeg|png|webp|gif)$/.test(data.mimeType) || !data.base64) return;
-    photoData = data;
-    document.querySelectorAll(".memory-photo").forEach((image) => {
-      image.src = `data:${data.mimeType};base64,${data.base64}`;
-      image.hidden = false;
-      image.closest(".page").querySelector(".photo-art").hidden = true;
-    });
-  };
-
-  const fetchPhoto = () => {
-    if (!config.appsScriptUrl) return;
-    const callbackName = `afterglowPhoto_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const script = document.createElement("script");
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      delete window[callbackName];
-      script.remove();
-    };
-    const timeout = window.setTimeout(finish, 8000);
-    window[callbackName] = (result) => {
-      window.clearTimeout(timeout);
-      if (result?.ok && result.photo) showPhoto(result.photo);
-      finish();
-    };
-    script.onerror = () => {
-      window.clearTimeout(timeout);
-      finish();
-    };
-    const separator = config.appsScriptUrl.includes("?") ? "&" : "?";
-    script.src = `${config.appsScriptUrl}${separator}action=photo&callback=${callbackName}&t=${Date.now()}`;
-    document.head.appendChild(script);
-  };
+  previous.addEventListener("click", () => turnTo(index - 1));
+  next.addEventListener("click", () => turnTo(index + 1));
+  document.addEventListener("keydown", (event) => {
+    if (event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
+    if (event.key === "ArrowRight") turnTo(index + 1);
+    if (event.key === "ArrowLeft") turnTo(index - 1);
+  });
 
   if (config.musicUrl) {
     music.src = config.musicUrl;
@@ -196,23 +187,48 @@
         try {
           await music.play();
           musicToggle.classList.add("is-playing");
-          musicToggle.setAttribute("aria-label", "Tắt nhạc nền");
-          musicToggle.title = "Tắt nhạc nền";
+          musicToggle.setAttribute("aria-label", "Tắt nhạc");
+          musicToggle.title = "Tắt nhạc";
           musicToggle.setAttribute("aria-pressed", "true");
-        } catch {
-          showToast("Trình duyệt chưa phát được file nhạc. Kiểm tra lại đường dẫn nhé.");
-        }
+        } catch { showToast("Trình duyệt chưa phát được file nhạc. Kiểm tra lại đường dẫn nhé."); }
       } else {
         music.pause();
         musicToggle.classList.remove("is-playing");
-        musicToggle.setAttribute("aria-label", "Bật nhạc nền");
-        musicToggle.title = "Bật nhạc nền";
+        musicToggle.setAttribute("aria-label", "Bật nhạc");
+        musicToggle.title = "Bật nhạc";
         musicToggle.setAttribute("aria-pressed", "false");
       }
     });
   }
 
-  renderCurrentPage(currentIndex);
-  updateNavigation();
+  const showPhoto = (data) => {
+    if (!data || !/^image\/(jpeg|png|webp|gif)$/.test(data.mimeType) || !data.base64) return;
+    photoData = data;
+    document.querySelectorAll(".memory-photo").forEach((image) => {
+      image.src = `data:${data.mimeType};base64,${data.base64}`;
+      image.hidden = false;
+      image.closest(".scene").querySelector(".photo-art").hidden = true;
+    });
+  };
+
+  const fetchPhoto = () => {
+    if (!config.appsScriptUrl) return;
+    const callback = `afterglowPhoto_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const script = document.createElement("script");
+    const timeout = setTimeout(() => { delete window[callback]; script.remove(); }, 8000);
+    window[callback] = (result) => {
+      clearTimeout(timeout);
+      if (result?.ok && result.photo) showPhoto(result.photo);
+      delete window[callback];
+      script.remove();
+    };
+    script.onerror = () => { clearTimeout(timeout); delete window[callback]; script.remove(); };
+    const separator = config.appsScriptUrl.includes("?") ? "&" : "?";
+    script.src = `${config.appsScriptUrl}${separator}action=photo&callback=${callback}&t=${Date.now()}`;
+    document.head.appendChild(script);
+  };
+
+  render(index);
+  update();
   fetchPhoto();
 })();
